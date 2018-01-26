@@ -30,7 +30,7 @@ namespace Pharmacy.Controllers
         /// <returns code="200">Customer</returns>  
         // GET: api/Customers/5
         [HttpGet]
-        [Route("api/Customers/{userid}")]
+        [Route("api/Customers")]
         public IActionResult GetCustomer(string userid)
         {
             CustomerPoco customer = _service.GetCustomerByUsername(userid);

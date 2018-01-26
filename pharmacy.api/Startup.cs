@@ -38,8 +38,6 @@ namespace Pharmacy
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IReminderService, ReminderService>();
 
-            services.AddMvc();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v2", new Info { Title = "McKenzies Pharmacy API", Version = "v2" });
@@ -51,7 +49,7 @@ namespace Pharmacy
             // TODO: find a workaround to having this regferenced here so I can decouple application
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            var domain = $"https://{Configuration["Auth0:Domain"]}/";
+            string domain = $"https://{Configuration["Auth0:Domain"]}/";
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,6 +60,9 @@ namespace Pharmacy
                 options.Authority = domain;
                 options.Audience = Configuration["Auth0:ApiIdentifier"];
             });
+
+            services.AddMvc();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,8 +74,11 @@ namespace Pharmacy
             }
 
             // Shows UseCors with CorsPolicyBuilder.
-            app.UseCors(builder => builder.WithOrigins(Configuration["ClientDomain"]));
-
+            var allowClient = Configuration["ClientDomain"];
+            app.UseCors(builder => builder
+                .WithOrigins(allowClient)
+                .AllowAnyMethod()
+                .WithHeaders("authorization", "accept", "content-type", "origin"));;
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
