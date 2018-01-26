@@ -31,6 +31,7 @@ namespace Pharmacy.Controllers
         /// <param name="drugName"></param>
         /// <returns code="200"></returns>  
         // GET: api/Drugs
+        [HttpGet]
         public IEnumerable<DrugPoco> GetDrugs(string drugName)
         {
             var userID = User.Identity.Name;

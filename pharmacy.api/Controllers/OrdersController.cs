@@ -29,7 +29,7 @@ namespace Pharmacy.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        [Route("Api/Order")]
+        [Route("api/Order")]
         public IActionResult GetOrder()
         {
             var userId = User.Identity.Name;
@@ -49,14 +49,14 @@ namespace Pharmacy.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        [Route("Api/Order/{id}")]
+        [Route("api/Order/{id}")]
         public OrderPoco GetOrder(Guid id)
         {
             return _service.GetOrder(id);
         }
 
         [HttpGet]
-        [Route("Api/Orders")]
+        [Route("api/Orders")]
         public IEnumerable<Order> GetOrders()
         {
             var userId = User.Identity.Name;
@@ -70,7 +70,7 @@ namespace Pharmacy.Controllers
 
         // GET: api/Orders/962ed775-a117-4e93-9d6c-7208bc5d484d
         [HttpGet]
-        [Route("Api/OrderLines/{id}", Name = "GetOrderLines")]
+        [Route("api/OrderLines/{id}", Name = "GetOrderLines")]
         public IEnumerable<DrugPoco> GetOrderLines(Guid id)
         {
             return _service.GetOrderLines(id);
@@ -78,7 +78,7 @@ namespace Pharmacy.Controllers
 
         // PUT: api/Orders/5
         [HttpPut]
-        [Route("Api/Order/{id}", Name = "SubmitOrder")]
+        [Route("api/Order/{id}", Name = "SubmitOrder")]
         public IActionResult SubmitOrder(Guid id, OrderPoco order)
         {
             if (!ModelState.IsValid)
@@ -105,7 +105,7 @@ namespace Pharmacy.Controllers
 
         // POST: api/Orders
         [HttpPost]
-        [Route("Api/OrderLines")]
+        [Route("api/OrderLines")]
         public IActionResult AddOrderLineOrder(OrderLine orderLine)
         {
             if (!ModelState.IsValid)
@@ -127,7 +127,7 @@ namespace Pharmacy.Controllers
 
         // DELETE: api/Orders/2F714D7E-1CD6-4E73-98A7-98F875D558F6
         [HttpDelete]
-        [Route("Api/OrderLines/{id}")]
+        [Route("api/OrderLines/{id}")]
         public IActionResult DeleteOrderLine(Guid id)
         {
             OrderLine orderLine = _service.GetOrderLine(id);

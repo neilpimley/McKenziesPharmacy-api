@@ -29,7 +29,8 @@ namespace Pharmacy.Controllers
         /// <param name="userid"></param>
         /// <returns code="200">Customer</returns>  
         // GET: api/Customers/5
-        [Route("api/Customers")]
+        [HttpGet]
+        [Route("api/Customers/{userid}")]
         public IActionResult GetCustomer(string userid)
         {
             CustomerPoco customer = _service.GetCustomerByUsername(userid);
@@ -47,6 +48,7 @@ namespace Pharmacy.Controllers
         /// <param name="customer"></param>
         /// <returns code="200">Customer</returns>  
         // PUT: api/Customers/5
+        [HttpPut]
         [Route("api/Customers/{id}")]
         public IActionResult PutCustomer(Guid id, CustomerPoco customer)
         {
@@ -78,6 +80,7 @@ namespace Pharmacy.Controllers
         /// <param name="customer"></param>
         /// <returns code="200">Customer</returns>  
         // POST: api/Customers
+        [HttpPost]
         [Route("api/Customers")]
         public IActionResult PostCustomer(CustomerPoco customer)
         {

@@ -84,6 +84,9 @@ namespace Pharmacy
             {
                 c.SwaggerEndpoint("/swagger/v2/swagger.json", "McKenzies Pharmacy API V2");
             });
+
+            app.UseAuthentication();
+
             app.UseMvc();
         }
     }

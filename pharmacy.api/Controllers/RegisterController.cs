@@ -26,19 +26,22 @@ namespace Pharmacy.Controllers
 
 
         // GET: api/Shops
+        [HttpGet]
         [Route("api/Shops")]
         public IEnumerable<Shop> GetShops()
         {
             return _service.GetShops();
         }
 
-        [Route("Api/Titles")]
+        [HttpGet]
+        [Route("api/Titles")]
         public IEnumerable<Title> GetTitles()
         {
             return _service.GetTitles();
         }
 
         // GET: api/Practices
+        [HttpGet]
         [Route("api/Practices")]
         public IEnumerable<Practice> GetPractices()
         {
@@ -46,6 +49,7 @@ namespace Pharmacy.Controllers
         }
 
         // GET: api/Doctors
+        [HttpGet]
         [Route("api/Doctors")]
         public IEnumerable<Doctor> GetDoctors()
         {
@@ -53,6 +57,7 @@ namespace Pharmacy.Controllers
         }
 
         // GET: api/Practices/5/Doctors
+        [HttpGet]
         [Route("api/Practices/{practiceId}/Doctors")]
         public IEnumerable<Doctor> GetDoctors(Guid practiceId)
         {
@@ -60,6 +65,7 @@ namespace Pharmacy.Controllers
         }
 
         // GET: api/Addresses/SW6%201JL
+        [HttpGet]
         [Route("api/Addresses/{postCode}")]
         public async Task<IEnumerable<Address>> GetAddresses(string postCode)
         {

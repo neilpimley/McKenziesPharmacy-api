@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{DB645F66-199
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{BFCFD464-F3D6-4609-8658-CABD20EDF994}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1659088F-56EB-456B-AE76-49CDDDB9244D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pharmacy.api.tests", "..\pharmacy.api.tests\pharmacy.api.tests.csproj", "{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,10 @@ Global
 		{BCFEC79D-0D3B-4E27-8C6A-09F969E5A876}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCFEC79D-0D3B-4E27-8C6A-09F969E5A876}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCFEC79D-0D3B-4E27-8C6A-09F969E5A876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +54,7 @@ Global
 		{9B8BFF7D-6110-4082-B0ED-FD91DE4A6214} = {BFCFD464-F3D6-4609-8658-CABD20EDF994}
 		{F0AF463C-12D0-4E76-9FA3-412BD300168D} = {BFCFD464-F3D6-4609-8658-CABD20EDF994}
 		{BCFEC79D-0D3B-4E27-8C6A-09F969E5A876} = {BFCFD464-F3D6-4609-8658-CABD20EDF994}
+		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD} = {1659088F-56EB-456B-AE76-49CDDDB9244D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E4B88390-494D-435F-99A6-A1F2FCAC4BA4}
