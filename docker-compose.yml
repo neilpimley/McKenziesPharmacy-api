@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  pharmacy.api:
+    image: pharmacy.api
+    build:
+      context: ./pharmacy.api
+      dockerfile: Dockerfile

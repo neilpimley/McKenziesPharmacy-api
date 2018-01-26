@@ -27,8 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\pharmacy.models\pharmacy.models.csproj" />
-    <ProjectReference Include="..\pharmacy.services\pharmacy.services.csproj" />
+    <ProjectReference Include="..\pharmacy.models\pharmacy.models.csproj">
+      <Private>true</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\pharmacy.services\pharmacy.services.csproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
