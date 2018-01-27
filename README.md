@@ -10,7 +10,7 @@ The repository contains the source code of a sample Repeat Prescription Re-order
 
 ## System Components
 
-- Website Api (WebPai 2 / .NET Core)
+- Website Api (.NET Core / WebApi project / Swagger definitiion)
 - Core Services ( .NET Core, EF Core - services / respositories / models called and used WebApi)
 - Database (DB deployment project)
 - Tests (XUnit / integraton)
