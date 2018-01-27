@@ -27,7 +27,7 @@ namespace Pharmacy.Repositories
         public PharmacyContext(DbContextOptions<PharmacyContext> options)
             : base(options)
         { }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>

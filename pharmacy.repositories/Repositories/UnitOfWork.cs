@@ -6,7 +6,7 @@ namespace Pharmacy.Repositories
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private readonly Entities context = new Entities();
+        private readonly PharmacyContext context;
         private GenericRepository<Customer> customerRepository;
         private GenericRepository<Favourite> favouriteRepository;
         private GenericRepository<Address> addressRepository;
@@ -21,6 +21,11 @@ namespace Pharmacy.Repositories
         private GenericRepository<Reminder> reminderRepository;
         private GenericRepository<ReminderOrder> reminderOrderRepository;
         private GenericRepository<CollectScript> collectScriptRepository;
+
+        public UnitOfWork(PharmacyContext context)
+        {
+            this.context = context ?? throw new ArgumentNullException("Context was not supplied");
+        }
 
         public GenericRepository<Customer> CustomerRepository
         {

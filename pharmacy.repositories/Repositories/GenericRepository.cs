@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Pharmacy.Models;
 
 namespace Pharmacy.Repositories
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        internal Entities context;
+        internal PharmacyContext context;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(Entities context)
+        public GenericRepository(PharmacyContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();

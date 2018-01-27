@@ -3,5 +3,6 @@
   <PropertyGroup>
     <ShowAllFiles>false</ShowAllFiles>
     <NameOfLastUsedPublishProfile>pharmacyapi20180126112821 - Web Deploy</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
   </PropertyGroup>
 </Project>
