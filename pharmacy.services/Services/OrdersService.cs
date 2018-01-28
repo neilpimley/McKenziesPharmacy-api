@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
-using Pharmacy.Services.Interfaces;
-using Pharmacy.Models;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using NLog;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories.Interfaces;
+using Pharmacy.Services.Interfaces;
+using Pharmacy.Models;
 
 namespace Pharmacy.Services
 {
@@ -28,10 +29,10 @@ namespace Pharmacy.Services
             _reminderService = reminderService;
         }
 
-        public Order GetCurrentOrder(Guid customerId, int orderStatus)
+        public async Task<Order> GetCurrentOrder(Guid customerId, int orderStatus)
         {
             logger.Info("GetCurrentOrder - CustomerId: {0}, Status: {1}", orderStatus);
-            var order = _unitOfWork.OrderRepository
+            var order = await _unitOfWork.OrderRepository
                 .Get(o => o.CustomerId == customerId
                 && o.OrderStatus == orderStatus).FirstOrDefault();
             if (order == null)
@@ -39,7 +40,7 @@ namespace Pharmacy.Services
             return Mapper.Map<Order>(order); 
         }
 
-        private Order _createOrder(Guid customerId)
+        private async Task<Order> _createOrder(Guid customerId)
         {
             logger.Info("_createOrder - CustomerId: {0}", customerId);
             var order = new Order()
@@ -62,20 +63,20 @@ namespace Pharmacy.Services
             return order;
         }
 
-        public OrderPoco GetOrder(Guid id)
+        public async Task<OrderPoco> GetOrder(Guid id)
         {
             logger.Info("GetOrder - OrderId: {0}", id);
-            var _order = _unitOfWork.OrderRepository.GetByID(id);
+            var _order = await _unitOfWork.OrderRepository.GetByID(id);
             var order = Mapper.Map<OrderPoco>(_order);
-            order.Customer = _customerService.GetCustomer(_order.CustomerId.Value); ;
-            order.Items = GetOrderLines(order.OrderId);
+            order.Customer = await _customerService.GetCustomer(_order.CustomerId.Value); ;
+            order.Items = await GetOrderLines(order.OrderId);
             return order;
         }
 
-        public IEnumerable<OrderPoco> GetOrders(Guid customerId)
+        public async Task<IEnumerable<OrderPoco>> GetOrders(Guid customerId)
         {
             logger.Info("GetOrders - CustomerId: {0}", customerId);
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = await _customerService.GetCustomer(customerId);
             // don't get the current order
             var _orders = _unitOfWork.OrderRepository
                 .Get(o => o.CustomerId == customerId 
@@ -85,22 +86,22 @@ namespace Pharmacy.Services
             foreach (var order in orders)
             {
                 order.Customer = customer;
-                order.Items = GetOrderLines(order.OrderId);
+                order.Items = await GetOrderLines(order.OrderId);
             }
             return orders;
         }
 
-        public OrderLine GetOrderLine(Guid id)
+        public async Task<OrderLine> GetOrderLine(Guid id)
         {
             logger.Info("GetOrderLine - OrderLineID: {0}", id);
-            return Mapper.Map<OrderLine>(_unitOfWork.OrderLineRepository.GetByID(id));
+            return Mapper.Map<OrderLine>(await _unitOfWork.OrderLineRepository.GetByID(id));
         }
 
-        public IEnumerable<DrugPoco> GetOrderLines(Guid id)
+        public async Task<IEnumerable<DrugPoco>> GetOrderLines(Guid id)
         {
             logger.Info("GetOrderLines - OrderId: {0}", id);
-            var drugs = _unitOfWork.DrugRepository.Get();
-            return (from o in _unitOfWork.OrderLineRepository
+            var drugs = await _unitOfWork.DrugRepository.Get();
+            return (from o in await _unitOfWork.OrderLineRepository
                         .Get(filter: o => o.OrderId == id)
                     join d in drugs on o.DrugId equals d.DrugId
                     select new DrugPoco()
@@ -112,11 +113,11 @@ namespace Pharmacy.Services
                     });
         }
 
-        public void SubmitOrder(OrderPoco order)
+        public async void SubmitOrder(OrderPoco order)
         {
             logger.Info("SubmitOrder - Order: {0}", JsonConvert.SerializeObject(order));
             // update the order status
-            var _order = _unitOfWork.OrderRepository.GetByID(order.OrderId);
+            var _order = await _unitOfWork.OrderRepository.GetByID(order.OrderId);
             _order.OrderDate = DateTime.Now;
             _order.OrderStatus = (int)Status.Ordered;
             _unitOfWork.OrderRepository.Update(_order);
@@ -129,9 +130,9 @@ namespace Pharmacy.Services
             status.StatusSetDate = DateTime.Now;
             status.OrderId = order.OrderId;
             _unitOfWork.OrderStatusRepository.Insert(status);
-            order.Items = GetOrderLines(order.OrderId);
+            order.Items = await GetOrderLines(order.OrderId);
 
-            var customer = _customerService.GetCustomer(order.CustomerId.Value);
+            var customer = await _customerService.GetCustomer(order.CustomerId.Value);
             order.Customer = customer;
 
             var reminder = new ReminderPoco()
@@ -139,13 +140,13 @@ namespace Pharmacy.Services
                 CustomerId = customer.CustomerId,
                 OrderId = order.OrderId
             };
-            _reminderService.AddReminder(reminder);
+            await _reminderService.AddReminder(reminder);
             logger.Info("SubmitOrder - Reminder Added");
 
             try
             {
                 _unitOfWork.Save();
-                _emailService.SendOrderConfirmation(order);
+                await _emailService.SendOrderConfirmation(order);
                 logger.Info("SubmitOrder - Success");
             }
             catch(Exception ex) 
@@ -155,10 +156,10 @@ namespace Pharmacy.Services
             }
         }
 
-        public OrderLine AddToOrder(OrderLine orderLine) {
+        public async Task<OrderLine> AddToOrder(OrderLine orderLine) {
             logger.Info("AddToOrder - OrderLine: {0}", JsonConvert.SerializeObject(orderLine));
             // check it drug isn't in basket. Ifit is then just inrease the quantity
-            var existingOrderLine = _unitOfWork.OrderLineRepository
+            var existingOrderLine = await _unitOfWork.OrderLineRepository
                 .Get(o => o.DrugId == orderLine.DrugId && o.OrderId == orderLine.OrderId)
                 .FirstOrDefault();
             if (existingOrderLine == null) {
@@ -168,7 +169,7 @@ namespace Pharmacy.Services
             } else {
                 existingOrderLine.Qty++;
                 existingOrderLine.CreatedOn = DateTime.Now;
-                _unitOfWork.OrderLineRepository.Update(existingOrderLine);
+                await _unitOfWork.OrderLineRepository.Update(existingOrderLine);
                 orderLine = Mapper.Map<OrderLine>(existingOrderLine);
             }
             try
@@ -184,7 +185,7 @@ namespace Pharmacy.Services
             return orderLine;
         }
 
-        public void DeleteFromOrder(OrderLine orderLine) {
+        public async void DeleteFromOrder(OrderLine orderLine) {
             logger.Info("DeleteFromOrder - OrderLine: {0}", JsonConvert.SerializeObject(orderLine));
             _unitOfWork.OrderLineRepository.Delete(orderLine.OrderLineId);
             try

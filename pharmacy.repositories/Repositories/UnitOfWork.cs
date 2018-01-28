@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Pharmacy.Models;
 using Pharmacy.Repositories.Interfaces;
 
@@ -188,11 +189,11 @@ namespace Pharmacy.Repositories
                 return collectScriptRepository;
             }
         }
-        public void Save()
+        public async void Save()
         {
             try
             {
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
@@ -31,9 +32,9 @@ namespace Pharmacy.Controllers
         // GET: api/Customers/5
         [HttpGet]
         [Route("api/Customers")]
-        public IActionResult GetCustomer(string userid)
+        public async Task<IActionResult> GetCustomer(string userid)
         {
-            CustomerPoco customer = _service.GetCustomerByUsername(userid);
+            CustomerPoco customer = await _service.GetCustomerByUsername(userid);
             if (customer == null)
             {
                 return BadRequest("Customer has not registered yet");
@@ -50,7 +51,7 @@ namespace Pharmacy.Controllers
         // PUT: api/Customers/5
         [HttpPut]
         [Route("api/Customers/{id}")]
-        public IActionResult PutCustomer(Guid id, CustomerPoco customer)
+        public async Task<IActionResult> PutCustomer(Guid id, CustomerPoco customer)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +65,7 @@ namespace Pharmacy.Controllers
             
             try
             {
-                _service.UpdateCustomerDetails(customer);
+               await _service.UpdateCustomerDetails(customer);
             }
             catch (Exception ex)
             {
@@ -82,11 +83,11 @@ namespace Pharmacy.Controllers
         // POST: api/Customers
         [HttpPost]
         [Route("api/Customers")]
-        public IActionResult PostCustomer(CustomerPoco customer)
+        public async Task<IActionResult> PostCustomer(CustomerPoco customer)
         {
             try
             {
-                customer = _service.RegisterCustomer(customer);
+                customer = await _service.RegisterCustomer(customer);
             }
             catch (Exception ex)
             {
