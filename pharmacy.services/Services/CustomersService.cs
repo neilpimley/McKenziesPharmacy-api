@@ -117,7 +117,16 @@ namespace Pharmacy.Services
         public void ActivateCustomer(Guid id, string mobileVerificationCode)
         {
             logger.Info("ActiveateCustomer - {0}", id);
-            var customer = _unitOfWork.CustomerRepository
+            // Wait on a single task with no timeout specified.
+            Task getCustomerTask = Task.Factory.StartNew(() => _unitOfWork.CustomerRepository
+                .Get(c => c.CustomerId == id));
+            getCustomerTask.Wait();
+
+            if (getCustomerTask.IsCompleted)
+            {
+
+
+                var customer = _unitOfWork.CustomerRepository
                 .Get(x => x.CustomerId == id).FirstOrDefault();
             if (customer == null)
             {
