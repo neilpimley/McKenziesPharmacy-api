@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Moq;
 using Pharmacy.Controllers;
 using Pharmacy.Models;
@@ -16,7 +17,7 @@ namespace Pharmacy.ControllerTests
 
 
         [Fact]
-        public void GetFavourites_test()
+        public async Task GetFavourites_test()
         {
             var customerID = Guid.NewGuid();
             var customer = new CustomerPoco()
@@ -27,20 +28,20 @@ namespace Pharmacy.ControllerTests
             // Arrange
             var mockFavouriteskService = new Mock<IFavouritesService>();
             mockFavouriteskService.Setup(x => x.GetFavouriteDrugs(customerID))
-                .Returns(new List<DrugPoco> {
+                .Returns(Task.FromResult<IEnumerable<DrugPoco>>(new List<DrugPoco> {
                     new DrugPoco() { DrugName = "drug1"},
                     new DrugPoco() { DrugName = "drug2"}
-            });
+            }));
 
             var mockCustomersService = new Mock<ICustomersService>();
             mockCustomersService.Setup(x => x.GetCustomer(customerID))
-                .Returns(customer);
+                .Returns(Task.FromResult(customer));
 
             // Arrange
             var controller = new FavouritesController(mockFavouriteskService.Object, mockCustomersService.Object);
 
             // Act
-            var favourites = controller.Get();
+            var favourites = await controller.Get();
 
             // Assert
             Assert.NotNull(favourites);
@@ -48,13 +49,13 @@ namespace Pharmacy.ControllerTests
         }
 
         [Fact]
-        public void AddFavourite_Test()
+        public async Task AddFavourite_Test()
         {
             Favourite favourite;
         }
 
         [Fact]
-        public void DeleteFavourite_Test()
+        public async Task DeleteFavourite_Test()
         {
             Guid id;
         }

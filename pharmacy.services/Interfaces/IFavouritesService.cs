@@ -11,6 +11,6 @@ namespace Pharmacy.Services.Interfaces
         Task<IEnumerable<DrugPoco>> GetFavouriteDrugs(Guid customerId);
         Task<Favourite> GetFavourite(Guid id);
         Task<Favourite> AddFavourite(Favourite favouriteDrug);
-        void DeleteFavourite(Guid id);
+        Task DeleteFavourite(Guid id);
     }
 }

@@ -21,7 +21,6 @@ namespace Pharmacy.Services
         {
             _unitOfWork = unitOfWork;
             _orderService = orderService;
-            AutoMapperConfig.Setup();
         }
 
         public async Task<IEnumerable<ReminderPoco>> GetCustomerReminders(Guid customerId)
@@ -34,9 +33,10 @@ namespace Pharmacy.Services
                 select new ReminderPoco()
                     {
                         ReminderId = r.ReminderId,
-                        SendTime = r.SendTime,
-                        Drugs = await _orderService.GetOrderLines(o.OrderId)
-                    });
+                        SendTime = r.SendTime
+                        // TODO: fix this
+                        //Drugs = await _orderService.GetOrderLines(o.OrderId)
+                });
         }
         
         public async Task<IEnumerable<ReminderPoco>> GetAllUnsentReminders(DateTime day)
@@ -53,8 +53,9 @@ namespace Pharmacy.Services
                     select new ReminderPoco()
                     {
                         ReminderId = r.ReminderId,
-                        Email = c.Email,
-                        Drugs = await _orderService.GetOrderLines(o.OrderId)
+                        Email = c.Email
+                        // TODO: fix this
+                        //Drugs = await _orderService.GetOrderLines(o.OrderId)
                     });
         }
 

@@ -11,7 +11,7 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Customer functions of McKenzies Pharmacy API
     /// </summary>  
-    [Authorize]
+    // [Authorize]
     public class RegisterController : Controller
     {
         private readonly IRegisterService _service;
@@ -28,40 +28,40 @@ namespace Pharmacy.Controllers
         // GET: api/Shops
         [HttpGet]
         [Route("api/Shops")]
-        public IEnumerable<Shop> GetShops()
+        public async Task<IEnumerable<Shop>> GetShops()
         {
-            return _service.GetShops();
+            return await _service.GetShops();
         }
 
         [HttpGet]
         [Route("api/Titles")]
-        public IEnumerable<Title> GetTitles()
+        public async Task<IEnumerable<Title>> GetTitles()
         {
-            return _service.GetTitles();
+            return await _service.GetTitles();
         }
 
         // GET: api/Practices
         [HttpGet]
         [Route("api/Practices")]
-        public IEnumerable<Practice> GetPractices()
+        public async Task<IEnumerable<Practice>> GetPractices()
         {
-            return _service.GetPractices();
+            return await _service.GetPractices();
         }
 
         // GET: api/Doctors
         [HttpGet]
         [Route("api/Doctors")]
-        public IEnumerable<Doctor> GetDoctors()
+        public async Task<IEnumerable<Doctor>> GetDoctors()
         {
-            return _service.GetDoctors();
+            return await _service.GetDoctors();
         }
 
         // GET: api/Practices/5/Doctors
         [HttpGet]
         [Route("api/Practices/{practiceId}/Doctors")]
-        public IEnumerable<Doctor> GetDoctors(Guid practiceId)
+        public async Task<IEnumerable<Doctor>> GetDoctors(Guid practiceId)
         {
-            return _service.GetDoctorsByPractice(practiceId);
+            return await _service.GetDoctorsByPractice(practiceId);
         }
 
         // GET: api/Addresses/SW6%201JL

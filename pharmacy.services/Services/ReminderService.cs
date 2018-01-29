@@ -42,7 +42,7 @@ namespace Pharmacy.Services
             _unitOfWork.ReminderOrderRepository.Insert(_reminderOrder);
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 logger.Info("AddReminder - Success");
             }
             catch (Exception ex)
@@ -53,11 +53,13 @@ namespace Pharmacy.Services
             return reminder;
         }
 
-        public async void DeleteReminder(Guid id)
+        public async Task DeleteReminder(Guid id)
         {
             logger.Info("DeleteReminder -id {0}", id);
-            var reminderOrder = await _unitOfWork.ReminderOrderRepository
-                .Get(o => o.ReminderId == id).FirstOrDefault();
+            var reminderOrders = await _unitOfWork.ReminderOrderRepository
+                .Get(o => o.ReminderId == id);
+            
+            var reminderOrder = reminderOrders.FirstOrDefault();
             if (reminderOrder != null) { 
                 _unitOfWork.ReminderOrderRepository.Delete(reminderOrder.ReminderOrderId);
                 _unitOfWork.ReminderRepository.Delete(id);
@@ -66,7 +68,7 @@ namespace Pharmacy.Services
             // TODO: add deletes from other reminders
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 logger.Info("DeleteReminder - Success");
             }
             catch (Exception ex)

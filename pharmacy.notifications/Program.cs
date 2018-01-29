@@ -1,6 +1,7 @@
 ﻿using Pharmacy.Services;
 using Pharmacy.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Pharmacy.Notifications
 {

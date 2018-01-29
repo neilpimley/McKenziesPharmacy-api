@@ -9,7 +9,7 @@ namespace Pharmacy.Services.Interfaces
         Task<CustomerPoco> GetCustomerByUsername(string username);
         Task<CustomerPoco> GetCustomer(Guid id);
         Task<CustomerPoco> RegisterCustomer(CustomerPoco customer);
-        void UpdateCustomerDetails(CustomerPoco customer);
-        void ActivateCustomer(Guid id, string mobileVerificationCode);
+        Task UpdateCustomerDetails(CustomerPoco customer);
+        Task ActivateCustomer(Guid id, string mobileVerificationCode);
     }
 }

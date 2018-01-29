@@ -1,6 +1,7 @@
 ﻿using System;
 using Pharmacy.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
@@ -30,15 +31,15 @@ namespace Pharmacy.Controllers
         // GET: api/Orders
         [HttpGet]
         [Route("api/Order")]
-        public IActionResult GetOrder()
+        public async Task<IActionResult> GetOrder()
         {
             var userId = User.Identity.Name;
-            var customer = _customersService.GetCustomerByUsername(userId);
+            var customer = await _customersService.GetCustomerByUsername(userId);
             if (customer == null)
             {
                 return NotFound();
             }
-            Order order = _service.GetCurrentOrder(customer.CustomerId, (int)Status.Inbasket);
+            Order order = await _service.GetCurrentOrder(customer.CustomerId, (int)Status.Inbasket);
             if (order == null)
             {
                 return NotFound();
@@ -50,28 +51,28 @@ namespace Pharmacy.Controllers
         // GET: api/Orders
         [HttpGet]
         [Route("api/Order/{id}")]
-        public OrderPoco GetOrder(Guid id)
+        public async Task<OrderPoco> GetOrder(Guid id)
         {
-            return _service.GetOrder(id);
+            return await _service.GetOrder(id);
         }
 
         [HttpGet]
         [Route("api/Orders")]
-        public IEnumerable<Order> GetOrders()
+        public async Task<IEnumerable<Order>> GetOrders()
         {
             var userId = User.Identity.Name;
-            var customer = _customersService.GetCustomerByUsername(userId);
+            var customer = _customersService.GetCustomerByUsername(userId).Result;
             if (customer == null)
             {
                 throw new Exception("Customer doesn't exist");
             }
-            return _service.GetOrders(customer.CustomerId);
+            return await _service.GetOrders(customer.CustomerId);
         }
 
         // GET: api/Orders/962ed775-a117-4e93-9d6c-7208bc5d484d
         [HttpGet]
         [Route("api/OrderLines/{id}", Name = "GetOrderLines")]
-        public IEnumerable<DrugPoco> GetOrderLines(Guid id)
+        public Task<IEnumerable<DrugPoco>> GetOrderLines(Guid id)
         {
             return _service.GetOrderLines(id);
         }
@@ -79,7 +80,7 @@ namespace Pharmacy.Controllers
         // PUT: api/Orders/5
         [HttpPut]
         [Route("api/Order/{id}", Name = "SubmitOrder")]
-        public IActionResult SubmitOrder(Guid id, OrderPoco order)
+        public async Task<IActionResult> SubmitOrder(Guid id, OrderPoco order)
         {
             if (!ModelState.IsValid)
             {
@@ -93,7 +94,7 @@ namespace Pharmacy.Controllers
 
             try
             {
-                _service.SubmitOrder(order);
+                await _service.SubmitOrder(order);
             }
             catch (Exception ex)
             {
@@ -106,7 +107,7 @@ namespace Pharmacy.Controllers
         // POST: api/Orders
         [HttpPost]
         [Route("api/OrderLines")]
-        public IActionResult AddOrderLineOrder(OrderLine orderLine)
+        public async Task<IActionResult> AddOrderLineOrder(OrderLine orderLine)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +116,7 @@ namespace Pharmacy.Controllers
             
             try
             {
-                _service.AddToOrder(orderLine);
+                await _service.AddToOrder(orderLine);
             }
             catch (Exception ex)
             {
@@ -128,9 +129,9 @@ namespace Pharmacy.Controllers
         // DELETE: api/Orders/2F714D7E-1CD6-4E73-98A7-98F875D558F6
         [HttpDelete]
         [Route("api/OrderLines/{id}")]
-        public IActionResult DeleteOrderLine(Guid id)
+        public async Task<IActionResult> DeleteOrderLine(Guid id)
         {
-            OrderLine orderLine = _service.GetOrderLine(id);
+            OrderLine orderLine = await _service.GetOrderLine(id);
             if (orderLine == null)
             {
                 return NotFound();
@@ -138,7 +139,7 @@ namespace Pharmacy.Controllers
 
             try
             {
-                _service.DeleteFromOrder(orderLine);
+                await _service.DeleteFromOrder(orderLine);
             }
             catch(Exception ex)
             {

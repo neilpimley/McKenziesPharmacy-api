@@ -22,7 +22,7 @@ namespace Pharmacy.Services
         }
 
         public async Task<Favourite> GetFavourite(Guid id) {
-            return Mapper.Map<Favourite>(await _unitOfWork.FavouriteRepository.GetByID(id));
+            return await _unitOfWork.FavouriteRepository.GetByID(id);
         }
 
         public async Task<IEnumerable<DrugPoco>> GetFavouriteDrugs(Guid customerId)
@@ -44,8 +44,9 @@ namespace Pharmacy.Services
             logger.Info("AddFavourite - CustomerId:{0}, DrugId:{1}", favouriteDrug.CustomerId, favouriteDrug.DrugId);
             var exists = await _unitOfWork.FavouriteRepository
                 .Get(filter: f => f.DrugId == favouriteDrug.CustomerId
-                    && f.CustomerId == favouriteDrug.CustomerId).Any();
-            if (exists)
+                    && f.CustomerId == favouriteDrug.CustomerId);
+
+            if (exists.Any())
             {
                 throw new Exception("Favourite already exists");
             }
@@ -55,7 +56,7 @@ namespace Pharmacy.Services
                 _unitOfWork.FavouriteRepository.Insert(favouriteDrug);
                 try
                 {
-                    _unitOfWork.Save();
+                    await _unitOfWork.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -65,13 +66,13 @@ namespace Pharmacy.Services
             }
             return favouriteDrug;
         }
-        public void DeleteFavourite(Guid id)
+        public async Task DeleteFavourite(Guid id)
         {
             logger.Info("DeleteFavourite - FavouritID:{0}", id);
             _unitOfWork.FavouriteRepository.Delete(id);
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {

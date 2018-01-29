@@ -12,19 +12,13 @@ namespace Pharmacy.Config
             {
                 cfg.CreateMap<CustomerPoco, Customer>();
                 cfg.CreateMap<OrderPoco, Order>();
+                cfg.CreateMap<DrugPoco, Drug>();
+                cfg.CreateMap<ReminderPoco, Reminder>();
 
                 cfg.CreateMap<Customer, CustomerPoco>();
                 cfg.CreateMap<Order, OrderPoco>();
-                cfg.CreateMap<Title, Title>();
-                cfg.CreateMap<Address, Address>();
-                cfg.CreateMap<Doctor, Doctor>();
-                cfg.CreateMap<Practice, Practice>();
-                cfg.CreateMap<Shop, Shop>();
-                cfg.CreateMap<Address, Address>();
-                cfg.CreateMap<Favourite, Favourite>();
-                cfg.CreateMap<Order, Order>();
-                cfg.CreateMap<OrderLine, OrderLine>();
-                cfg.CreateMap<OrderStatus, OrderStatus>();
+                cfg.CreateMap<Drug, DrugPoco>();
+                cfg.CreateMap<Reminder, ReminderPoco>();
             });
         }
     }

@@ -25,7 +25,7 @@ namespace Pharmacy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<PharmacyContext>(options => options.UseSqlServer(Configuration["ConnectionString:Entities"]));
+            services.AddDbContext<PharmacyContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Entities"]));
 
             // Add application services.
             services.AddTransient<ICustomersService, CustomersService>();

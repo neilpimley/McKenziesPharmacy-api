@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
@@ -32,11 +33,11 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // GET: api/Drugs
         [HttpGet]
-        public IEnumerable<DrugPoco> GetDrugs(string drugName)
+        public async Task<IEnumerable<DrugPoco>> GetDrugs(string drugName)
         {
-            var userID = User.Identity.Name;
-            var customer = _customerService.GetCustomerByUsername(userID);
-            return _service.GetDrugs(customer.CustomerId, drugName);
+            var userId = User.Identity.Name;
+            var customer = await _customerService.GetCustomerByUsername(userId);
+            return await _service.GetDrugs(customer.CustomerId, drugName);
         }
        
     }

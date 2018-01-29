@@ -32,11 +32,12 @@ namespace Pharmacy.Services
         public async Task<Order> GetCurrentOrder(Guid customerId, int orderStatus)
         {
             logger.Info("GetCurrentOrder - CustomerId: {0}, Status: {1}", orderStatus);
-            var order = await _unitOfWork.OrderRepository
+            var orders = await _unitOfWork.OrderRepository
                 .Get(o => o.CustomerId == customerId
-                && o.OrderStatus == orderStatus).FirstOrDefault();
+                && o.OrderStatus == orderStatus);
+            var order = orders.FirstOrDefault();
             if (order == null)
-                order = _createOrder(customerId);
+                order = _createOrder(customerId).Result;
             return Mapper.Map<Order>(order); 
         }
 
@@ -53,7 +54,7 @@ namespace Pharmacy.Services
              _unitOfWork.OrderRepository.Insert(order);
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {
@@ -94,7 +95,7 @@ namespace Pharmacy.Services
         public async Task<OrderLine> GetOrderLine(Guid id)
         {
             logger.Info("GetOrderLine - OrderLineID: {0}", id);
-            return Mapper.Map<OrderLine>(await _unitOfWork.OrderLineRepository.GetByID(id));
+            return await _unitOfWork.OrderLineRepository.GetByID(id);
         }
 
         public async Task<IEnumerable<DrugPoco>> GetOrderLines(Guid id)
@@ -113,7 +114,7 @@ namespace Pharmacy.Services
                     });
         }
 
-        public async void SubmitOrder(OrderPoco order)
+        public async Task SubmitOrder(OrderPoco order)
         {
             logger.Info("SubmitOrder - Order: {0}", JsonConvert.SerializeObject(order));
             // update the order status
@@ -145,7 +146,7 @@ namespace Pharmacy.Services
 
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 await _emailService.SendOrderConfirmation(order);
                 logger.Info("SubmitOrder - Success");
             }
@@ -159,9 +160,10 @@ namespace Pharmacy.Services
         public async Task<OrderLine> AddToOrder(OrderLine orderLine) {
             logger.Info("AddToOrder - OrderLine: {0}", JsonConvert.SerializeObject(orderLine));
             // check it drug isn't in basket. Ifit is then just inrease the quantity
-            var existingOrderLine = await _unitOfWork.OrderLineRepository
-                .Get(o => o.DrugId == orderLine.DrugId && o.OrderId == orderLine.OrderId)
-                .FirstOrDefault();
+            var existingOrderLines = await _unitOfWork.OrderLineRepository
+                .Get(o => o.DrugId == orderLine.DrugId && o.OrderId == orderLine.OrderId);
+
+            var existingOrderLine = existingOrderLines.FirstOrDefault();
             if (existingOrderLine == null) {
                 orderLine.CreatedOn = DateTime.Now;
                 orderLine.OrderLineId = Guid.NewGuid();
@@ -169,8 +171,8 @@ namespace Pharmacy.Services
             } else {
                 existingOrderLine.Qty++;
                 existingOrderLine.CreatedOn = DateTime.Now;
-                await _unitOfWork.OrderLineRepository.Update(existingOrderLine);
-                orderLine = Mapper.Map<OrderLine>(existingOrderLine);
+                _unitOfWork.OrderLineRepository.Update(existingOrderLine);
+                orderLine = existingOrderLine;
             }
             try
             {
@@ -185,12 +187,12 @@ namespace Pharmacy.Services
             return orderLine;
         }
 
-        public async void DeleteFromOrder(OrderLine orderLine) {
+        public async Task DeleteFromOrder(OrderLine orderLine) {
             logger.Info("DeleteFromOrder - OrderLine: {0}", JsonConvert.SerializeObject(orderLine));
             _unitOfWork.OrderLineRepository.Delete(orderLine.OrderLineId);
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 logger.Info("DeleteFromOrder - Success");
             }
             catch (Exception ex)

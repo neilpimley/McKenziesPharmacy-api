@@ -8,6 +8,6 @@ namespace Pharmacy.Services.Interfaces
     public interface IReminderService
     {
         Task<Reminder> AddReminder(ReminderPoco reminder);
-        void DeleteReminder(Guid id);
+        Task DeleteReminder(Guid id);
     }
 }

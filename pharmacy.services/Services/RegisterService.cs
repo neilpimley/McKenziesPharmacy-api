@@ -11,7 +11,6 @@ using getAddress.Sdk.Api.Requests;
 using getAddress.Sdk.Api.Responses;
 using Microsoft.Extensions.Options;
 using NLog;
-using Pharmacy.Config;
 using Pharmacy.Exceptions;
 using Pharmacy.Models;
 using Pharmacy.Repositories.Interfaces;
@@ -29,14 +28,13 @@ namespace Pharmacy.Services
         {
             _unitOfWork = unitOfWork;
             _apiKey = serviceSettings.Value.GetAddressApiKey;
-            AutoMapperConfig.Setup();
         }
 
         public async Task<IEnumerable<Shop>> GetShops()
         {
             try
             {
-                return Mapper.Map<IEnumerable<Shop>>(await _unitOfWork.ShopRepository.Get());
+                return await _unitOfWork.ShopRepository.Get();
             }
             catch (Exception ex)
             {
@@ -49,7 +47,7 @@ namespace Pharmacy.Services
         {
             try
             {
-                return Mapper.Map<IEnumerable<Title>>(await _unitOfWork.TitleRepository.Get());
+                return await _unitOfWork.TitleRepository.Get();
             }
             catch (Exception ex)
             {
@@ -62,7 +60,7 @@ namespace Pharmacy.Services
         {
             try
             {
-                return Mapper.Map<IEnumerable<Practice>>(await _unitOfWork.PracticeRepository.Get());
+                return await _unitOfWork.PracticeRepository.Get();
             }
             catch (Exception ex)
             {
@@ -75,7 +73,7 @@ namespace Pharmacy.Services
         {
             try
             {
-            return Mapper.Map<IEnumerable<Doctor>>(await _unitOfWork.DoctorRepository.Get());
+            return await _unitOfWork.DoctorRepository.Get();
             }
             catch (Exception ex)
             {
@@ -88,7 +86,7 @@ namespace Pharmacy.Services
         {
             try
             {
-            return Mapper.Map<IEnumerable<Doctor>>(await _unitOfWork.DoctorRepository.Get(d => d.PracticeId == practiceId));
+            return await _unitOfWork.DoctorRepository.Get(d => d.PracticeId == practiceId);
             }
             catch (Exception ex)
             {

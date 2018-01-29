@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NLog;
 using Pharmacy.Config;
 using Pharmacy.Models.Pocos;
@@ -29,28 +28,18 @@ namespace Pharmacy.Services
         public async Task<CustomerPoco> GetCustomerByUsername(string username)
         {
             logger.Info("GetCustomerByUsername - {0}", username);
-
-            var _customers = await _unitOfWork.CustomerRepository
-                .Get(c => c.UserId == username);
-
-            // Wait on a single task with no timeout specified.
-            Task getCustomerTask = Task.Factory.StartNew(() => _unitOfWork.CustomerRepository
-                .Get(c => c.UserId == username));
-            getCustomerTask.Wait();
-            
-            if (getCustomerTask.IsCompleted) {
-                var _customer = _customers.FirstOrDefault();
-                if (_customer == null)
-                {
-                    logger.Error("GetCustomerByUsername - User doesn't exist");
-                    return null;
-                }
-                var customer = Mapper.Map<CustomerPoco>(_customer);
-                customer.Title = Mapper.Map<Title>(await _unitOfWork.TitleRepository.GetByID(_customer.TitleId));
-                customer.Address = Mapper.Map<Address>(await _unitOfWork.AddressRepository.GetByID(_customer.AddressId));
-                customer.Shop = Mapper.Map<Shop>(await _unitOfWork.ShopRepository.GetByID(_customer.ShopId));
-                customer.Doctor = Mapper.Map<Doctor>(await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId));
+            var _customers = await _unitOfWork.CustomerRepository.Get(c => c.UserId == username);
+            var _customer = _customers.FirstOrDefault();
+            if (_customer == null)
+            {
+                logger.Error("GetCustomerByUsername - User doesn't exist");
+                return null;
             }
+            var customer = Mapper.Map<CustomerPoco>(_customer);
+            customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
+            customer.Address = await _unitOfWork.AddressRepository.GetByID(_customer.AddressId);
+            customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
+            customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
             return customer;
         }
 
@@ -63,10 +52,10 @@ namespace Pharmacy.Services
                 return null;
             }
             var customer = Mapper.Map<CustomerPoco>(_customer);
-            customer.Title = Mapper.Map<Title>(await _unitOfWork.TitleRepository.GetByID(_customer.TitleId));
-            customer.Address = Mapper.Map<Address>(await _unitOfWork.AddressRepository.GetByID(_customer.AddressId));
-            customer.Shop = Mapper.Map<Shop>(await _unitOfWork.ShopRepository.GetByID(_customer.ShopId));
-            customer.Doctor = Mapper.Map<Doctor>(await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId));
+            customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
+            customer.Address = await _unitOfWork.AddressRepository.GetByID(_customer.AddressId);
+            customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
+            customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
             return customer;
         }
 
@@ -84,10 +73,10 @@ namespace Pharmacy.Services
             _unitOfWork.AddressRepository.Insert(customer.Address);
             try
             {
-                _unitOfWork.Save();
-                customer.Title = Mapper.Map<Title>(await _unitOfWork.TitleRepository.GetByID(_customer.TitleId));
-                customer.Shop = Mapper.Map<Shop>(await _unitOfWork.ShopRepository.GetByID(_customer.ShopId));
-                customer.Doctor = Mapper.Map<Doctor>(await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId));
+                await _unitOfWork.SaveAsync();
+                customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
+                customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
+                customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
             }
             catch (Exception ex)
             {
@@ -97,15 +86,15 @@ namespace Pharmacy.Services
             return customer;
         }
 
-        public void UpdateCustomerDetails(CustomerPoco customer) {
+        public async Task UpdateCustomerDetails(CustomerPoco customer) {
             logger.Info("UpdateCustomerDetails - {0}", customer.CustomerId);
             var _customer = Mapper.Map<Customer>(customer);
             _unitOfWork.CustomerRepository.Update(_customer);
             _unitOfWork.AddressRepository.Update(customer.Address);
             try
             {
-                _unitOfWork.Save();
-                var task = _emailService.SendPersonalDetailsAmended(customer);
+                await _unitOfWork.SaveAsync();
+                await _emailService.SendPersonalDetailsAmended(customer);
             }
             catch (Exception ex)
             {
@@ -114,20 +103,11 @@ namespace Pharmacy.Services
             }
         }
 
-        public void ActivateCustomer(Guid id, string mobileVerificationCode)
+        public async Task ActivateCustomer(Guid id, string mobileVerificationCode)
         {
             logger.Info("ActiveateCustomer - {0}", id);
-            // Wait on a single task with no timeout specified.
-            Task getCustomerTask = Task.Factory.StartNew(() => _unitOfWork.CustomerRepository
-                .Get(c => c.CustomerId == id));
-            getCustomerTask.Wait();
-
-            if (getCustomerTask.IsCompleted)
-            {
-
-
-                var customer = _unitOfWork.CustomerRepository
-                .Get(x => x.CustomerId == id).FirstOrDefault();
+            var customers = await _unitOfWork.CustomerRepository.Get(x => x.CustomerId == id);
+            var customer = customers.FirstOrDefault();
             if (customer == null)
             {
                 throw new Exception("Customer not found");
@@ -138,7 +118,7 @@ namespace Pharmacy.Services
             customer.Active = true;
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {

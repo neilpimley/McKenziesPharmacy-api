@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Pharmacy.ControllerTests
@@ -6,7 +7,7 @@ namespace Pharmacy.ControllerTests
     public class RemindersTest
     {
         [Fact]
-        public void TestMethod1()
+        public async Task TestMethod1()
         {
         }
     }

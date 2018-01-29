@@ -1,6 +1,7 @@
 ﻿using Pharmacy.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Pharmacy.Models.Pocos;
@@ -35,15 +36,15 @@ namespace Pharmacy.Controllers
         /// <param name="id">n</param>
         /// <returns code="200">Customer</returns>  // GET: api/Reminders/962ed775-a117-4e93-9d6c-7208bc5d484d
         [HttpGet]
-        public IEnumerable<ReminderPoco> GetCustomerReminders(Guid id)
+        public async Task<IEnumerable<ReminderPoco>> GetCustomerReminders(Guid id)
         {
             var userId = User.Identity.Name;
-            Customer customer = _customersService.GetCustomerByUsername(userId);
+            Customer customer = _customersService.GetCustomerByUsername(userId).Result;
             if (customer == null)
             {
                 throw new Exception("Customer doesn't exist");
             }
-            return _remindersService.GetCustomerReminders(customer.CustomerId);
+            return await _remindersService.GetCustomerReminders(customer.CustomerId);
         }
 
         
