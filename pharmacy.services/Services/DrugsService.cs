@@ -23,7 +23,7 @@ namespace Pharmacy.Services
         public async Task<IEnumerable<DrugPoco>> GetDrugs(Guid customerId, string drugName)
         {
             logger.Info("GetDrugs - {0}, {1}", customerId, drugName);
-            return (from d in await _unitOfWork.DrugRepository.Get(filter: d => d.DrugName.StartsWith(drugName))
+            return (from d in await _unitOfWork.DrugRepository.Get(d => d.DrugName.StartsWith(drugName))
                     join f in await _unitOfWork.FavouriteRepository.Get(f => f.CustomerId == customerId) 
                     on d.DrugId equals f.DrugId into favs
                     from f in favs.DefaultIfEmpty()

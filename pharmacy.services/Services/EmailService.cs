@@ -13,18 +13,18 @@ namespace Pharmacy.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly string apiKey;
+        private readonly string _apiKey;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public EmailService(IOptions<ServiceSettings> serviceSettings)
         {
-            apiKey = serviceSettings.Value.SendGridApiKey;
+            _apiKey = serviceSettings.Value.SendGridApiKey;
         }
 
         public async Task SendRegisterConfirmation(CustomerPoco customer)
         {
             logger.Info("SendPersonalDetailsAmended - email: {0}", customer.Email);
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("prescriptions@mckenziespharmacy.com", "McKenzies Pharmacy");
             var subject = "Registration Confirmation - McKenzies Pharmacy";
             var to = new EmailAddress(customer.Email, customer.Fullname);
@@ -46,7 +46,7 @@ namespace Pharmacy.Services
         public async Task SendPersonalDetailsAmended(CustomerPoco customer)
         {
             logger.Info("SendPersonalDetailsAmended - email: {0}", customer.Email);
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("prescriptions@mckenziespharmacy.com", "McKenzies Pharmacy");
             var subject = "Registration Confirmation - McKenzies Pharmacy";
             var to = new EmailAddress(customer.Email, customer.Fullname);
@@ -68,7 +68,7 @@ namespace Pharmacy.Services
         public async Task SendOrderConfirmation(OrderPoco order)
         {
             logger.Info("SendOrderConfirmation - email: {0}", order.Customer.Email);
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("prescriptions@mckenziespharmacy.com", "McKenzies Pharmacy - " + order.Customer.Shop.ShopName);
             var subject = "Order Confirmation - McKenzies Pharmacy - " + order.Customer.Shop.ShopName;
             var to = new EmailAddress(order.Customer.Email, order.Customer.Fullname);
@@ -89,7 +89,7 @@ namespace Pharmacy.Services
         public async Task SendOrderReadyToColect(OrderPoco order)
         {
             logger.Info("SendOrderReadyToColect - email: {0}", order.Customer.Email);
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("prescriptions@mckenziespharmacy.com", "McKenzies Pharmacy - " + order.Customer.Shop.ShopName);
             var subject = "Order Ready - McKenzies Pharmacy - " + order.Customer.Shop.ShopName;
             var to = new EmailAddress(order.Customer.Email, order.Customer.Fullname);
@@ -111,7 +111,7 @@ namespace Pharmacy.Services
         public async Task SendOrderReminder(ReminderPoco reminder)
         {
             logger.Info("SendOrderReminder - email: {0}", reminder.Email);
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("prescriptions@mckenziespharmacy.com", "McKenzies Pharmacy");
             var subject = "Reminder";
             var to = new EmailAddress(reminder.Email, reminder.Email);

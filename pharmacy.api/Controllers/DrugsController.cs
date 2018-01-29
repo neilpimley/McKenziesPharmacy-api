@@ -33,11 +33,15 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // GET: api/Drugs
         [HttpGet]
-        public async Task<IEnumerable<DrugPoco>> GetDrugs(string drugName)
+        public async Task<IActionResult> GetDrugs(string drugName)
         {
+            if (User.Identity.Name == null)
+            {
+                return BadRequest("You must be logged in to search for drugs");
+            }
             var userId = User.Identity.Name;
             var customer = await _customerService.GetCustomerByUsername(userId);
-            return await _service.GetDrugs(customer.CustomerId, drugName);
+            return Ok(await _service.GetDrugs(customer.CustomerId, drugName));
         }
        
     }

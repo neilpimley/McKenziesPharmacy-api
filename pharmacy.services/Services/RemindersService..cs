@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Pharmacy.Config;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories.Interfaces;
 using Pharmacy.Services.Interfaces;
-using Pharmacy.Models;
 
 namespace Pharmacy.Services
 {
@@ -34,8 +32,8 @@ namespace Pharmacy.Services
                     {
                         ReminderId = r.ReminderId,
                         SendTime = r.SendTime
-                        // TODO: fix this
-                        //Drugs = await _orderService.GetOrderLines(o.OrderId)
+                        // TODO: fix this / possibly have to retrieve drugs from repository
+                        // Drugs = await _orderService.GetOrderLines(o.OrderId)
                 });
         }
         

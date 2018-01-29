@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
 using NLog;
-using Pharmacy.Config;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories.Interfaces;
 using Pharmacy.Services.Interfaces;
@@ -17,12 +15,13 @@ namespace Pharmacy.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailService _emailService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IMapper _mapper;
 
-        public CustomersService(IUnitOfWork unitOfWork, IEmailService emailService)
+        public CustomersService(IUnitOfWork unitOfWork, IEmailService emailService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _emailService = emailService;
-            AutoMapperConfig.Setup();
+            _mapper = mapper;
         }
 
         public async Task<CustomerPoco> GetCustomerByUsername(string username)
@@ -35,7 +34,7 @@ namespace Pharmacy.Services
                 logger.Error("GetCustomerByUsername - User doesn't exist");
                 return null;
             }
-            var customer = Mapper.Map<CustomerPoco>(_customer);
+            var customer = _mapper.Map<CustomerPoco>(_customer);
             customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
             customer.Address = await _unitOfWork.AddressRepository.GetByID(_customer.AddressId);
             customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
@@ -51,7 +50,7 @@ namespace Pharmacy.Services
                 logger.Error("GetCustomerByUsername - User doesn't exist");
                 return null;
             }
-            var customer = Mapper.Map<CustomerPoco>(_customer);
+            var customer = _mapper.Map<CustomerPoco>(_customer);
             customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
             customer.Address = await _unitOfWork.AddressRepository.GetByID(_customer.AddressId);
             customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
@@ -68,7 +67,7 @@ namespace Pharmacy.Services
             customer.Address.AddressId = customer.AddressId;
             customer.Address.CreatedOn = DateTime.Now;
 
-            var _customer = Mapper.Map<Customer>(customer);
+            var _customer = _mapper.Map<Customer>(customer);
             _unitOfWork.CustomerRepository.Insert(_customer);
             _unitOfWork.AddressRepository.Insert(customer.Address);
             try
@@ -88,7 +87,7 @@ namespace Pharmacy.Services
 
         public async Task UpdateCustomerDetails(CustomerPoco customer) {
             logger.Info("UpdateCustomerDetails - {0}", customer.CustomerId);
-            var _customer = Mapper.Map<Customer>(customer);
+            var _customer = _mapper.Map<Customer>(customer);
             _unitOfWork.CustomerRepository.Update(_customer);
             _unitOfWork.AddressRepository.Update(customer.Address);
             try

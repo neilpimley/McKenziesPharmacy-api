@@ -34,7 +34,7 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // GET: api/Favourites
         [HttpGet]
-        public async Task<IEnumerable<DrugPoco>> Get()
+        public async Task<IActionResult> Get()
         {
             var userID = User.Identity.Name;
             var customer = await _customerService.GetCustomerByUsername(userID);
@@ -42,7 +42,7 @@ namespace Pharmacy.Controllers
             {
                 throw new Exception("Customer doesn't exist");
             }
-            return await _service.GetFavouriteDrugs(customer.CustomerId);
+            return Ok(_service.GetFavouriteDrugs(customer.CustomerId));
         }
 
         /// <summary>  

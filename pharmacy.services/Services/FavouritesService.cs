@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using AutoMapper;
 using NLog;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories.Interfaces;
@@ -43,7 +42,7 @@ namespace Pharmacy.Services
         {
             logger.Info("AddFavourite - CustomerId:{0}, DrugId:{1}", favouriteDrug.CustomerId, favouriteDrug.DrugId);
             var exists = await _unitOfWork.FavouriteRepository
-                .Get(filter: f => f.DrugId == favouriteDrug.CustomerId
+                .Get(f => f.DrugId == favouriteDrug.CustomerId
                     && f.CustomerId == favouriteDrug.CustomerId);
 
             if (exists.Any())

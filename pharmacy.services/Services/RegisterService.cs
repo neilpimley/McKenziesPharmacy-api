@@ -2,10 +2,8 @@
 using Pharmacy.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using getAddress.Sdk;
 using getAddress.Sdk.Api.Requests;
 using getAddress.Sdk.Api.Responses;
@@ -73,7 +71,7 @@ namespace Pharmacy.Services
         {
             try
             {
-            return await _unitOfWork.DoctorRepository.Get();
+                return await _unitOfWork.DoctorRepository.Get();
             }
             catch (Exception ex)
             {
@@ -86,7 +84,7 @@ namespace Pharmacy.Services
         {
             try
             {
-            return await _unitOfWork.DoctorRepository.Get(d => d.PracticeId == practiceId);
+                return await _unitOfWork.DoctorRepository.Get(d => d.PracticeId == practiceId);
             }
             catch (Exception ex)
             {
@@ -127,7 +125,7 @@ namespace Pharmacy.Services
                     logger.Error("GetAddressesByPostcode failed for '{0}'. Error: {1}", postCode, ex.Message );
                     throw new ApiConnectionException("GetPostcodeApi");
                 }
-                            }
+            }
             return addresses;
         }
 

@@ -19,14 +19,17 @@ namespace Pharmacy.Services
         private readonly ICustomersService _customerService;
         private readonly IReminderService _reminderService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IMapper _mapper;
 
         public OrdersService(IUnitOfWork unitOfWork, IEmailService emailService, 
-            ICustomersService customerService, IReminderService reminderService)
+            ICustomersService customerService, IReminderService reminderService,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _emailService = emailService;
             _customerService = customerService;
             _reminderService = reminderService;
+            _mapper = mapper;
         }
 
         public async Task<Order> GetCurrentOrder(Guid customerId, int orderStatus)
@@ -38,7 +41,7 @@ namespace Pharmacy.Services
             var order = orders.FirstOrDefault();
             if (order == null)
                 order = _createOrder(customerId).Result;
-            return Mapper.Map<Order>(order); 
+            return order; 
         }
 
         private async Task<Order> _createOrder(Guid customerId)
@@ -68,7 +71,7 @@ namespace Pharmacy.Services
         {
             logger.Info("GetOrder - OrderId: {0}", id);
             var _order = await _unitOfWork.OrderRepository.GetByID(id);
-            var order = Mapper.Map<OrderPoco>(_order);
+            var order = _mapper.Map<OrderPoco>(_order);
             order.Customer = await _customerService.GetCustomer(_order.CustomerId.Value); ;
             order.Items = await GetOrderLines(order.OrderId);
             return order;
@@ -83,7 +86,7 @@ namespace Pharmacy.Services
                 .Get(o => o.CustomerId == customerId 
                 && o.OrderStatus != (int)Status.Inbasket, 
                     o => o.OrderByDescending(d => d.OrderDate));
-            var orders = Mapper.Map<List<OrderPoco>>(_orders);
+            var orders = _mapper.Map<List<OrderPoco>>(_orders);
             foreach (var order in orders)
             {
                 order.Customer = customer;

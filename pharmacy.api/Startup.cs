@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pharmacy.Models;
+using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories;
 using Pharmacy.Repositories.Interfaces;
 using Pharmacy.Services;
@@ -43,6 +44,21 @@ namespace Pharmacy
 
             services.Configure<ServiceSettings>(Configuration.GetSection("ServiceSettings"));
 
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<CustomerPoco, Customer>();
+                cfg.CreateMap<OrderPoco, Order>();
+                cfg.CreateMap<DrugPoco, Drug>();
+                cfg.CreateMap<ReminderPoco, Reminder>();
+
+                cfg.CreateMap<Customer, CustomerPoco>();
+                cfg.CreateMap<Order, OrderPoco>();
+                cfg.CreateMap<Drug, DrugPoco>();
+                cfg.CreateMap<Reminder, ReminderPoco>();
+            });
+
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             // TODO: find a workaround to having this regferenced here so I can decouple application
             services.AddTransient<IUnitOfWork, UnitOfWork>();
