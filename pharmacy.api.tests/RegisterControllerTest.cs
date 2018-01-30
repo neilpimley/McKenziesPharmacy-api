@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Pharmacy.Controllers;
 using Moq;
@@ -14,7 +15,7 @@ namespace Pharmacy.ControllerTests
         private readonly IRegisterService _registerService;
 
         [Fact]
-        public void GetAddresses()
+        public async Task GetAddresses()
         {
             string postcode = "BT10 )JH";
 

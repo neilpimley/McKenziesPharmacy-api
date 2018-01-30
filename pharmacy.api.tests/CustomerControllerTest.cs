@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Pharmacy.Controllers;
@@ -12,20 +13,20 @@ namespace Pharmacy.ControllerTests
     public class CustomerControllerTest
     {
         [Fact]
-        public void GetCustomer_Test()
+        public async Task GetCustomer_Test()
         {
             string userid = "google-1";
 
             // Arrange
             var mockService = new Mock<ICustomersService>();
             mockService.Setup(x => x.GetCustomerByUsername(userid))
-                .Returns(new CustomerPoco { UserId = "google-1" });
+                .Returns(Task.FromResult(new CustomerPoco { UserId = "google-1" }));
 
             // Arrange
             var controller = new CustomersController(mockService.Object);
 
             // Act
-            IActionResult actionResult = controller.GetCustomer(userid);
+            IActionResult actionResult = await controller.GetCustomer(userid);
             var contentResult = actionResult as OkObjectResult;
 
             // Assert
@@ -35,7 +36,7 @@ namespace Pharmacy.ControllerTests
         }
 
         [Fact]
-        public void PutCustomer_Test()
+        public async Task PutCustomer_Test()
         {
             var customer = new CustomerPoco()
             {
@@ -49,7 +50,7 @@ namespace Pharmacy.ControllerTests
             var controller = new CustomersController(mockService.Object);
 
             // Act
-            IActionResult actionResult = controller.PutCustomer(customer.CustomerId, customer);
+            IActionResult actionResult = await controller.PutCustomer(customer.CustomerId, customer);
             var contentResult = actionResult as OkResult;
 
             // Assert
@@ -57,7 +58,7 @@ namespace Pharmacy.ControllerTests
         }
 
         [Fact]
-        public void PostCustomer_Test()
+        public async Task PostCustomer_Test()
         {
             var customer = new CustomerPoco()
             {
@@ -71,7 +72,7 @@ namespace Pharmacy.ControllerTests
             var controller = new CustomersController(mockService.Object);
 
             // Act
-            IActionResult actionResult = controller.PostCustomer(customer);
+            IActionResult actionResult = await controller.PostCustomer(customer);
             var contentResult = actionResult as OkResult;
 
             // Assert

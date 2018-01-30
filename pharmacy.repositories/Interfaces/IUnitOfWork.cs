@@ -1,4 +1,6 @@
-﻿using Pharmacy.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Pharmacy.Models;
 
 namespace Pharmacy.Repositories.Interfaces
 {
@@ -19,5 +21,6 @@ namespace Pharmacy.Repositories.Interfaces
         GenericRepository<ReminderOrder> ReminderOrderRepository { get; }
         GenericRepository<CollectScript> CollectScriptRepository { get; }
         void Save();
+        Task SaveAsync();
     }
 }

@@ -1,20 +1,21 @@
-﻿using Pharmacy.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Pharmacy.Models;
 using Pharmacy.Models.Pocos;
 
 namespace Pharmacy.Services.Interfaces
 {
     public interface IOrdersService
     {        
-        Order GetCurrentOrder(Guid customerId, int status);
-        OrderPoco GetOrder(Guid id);
-        IEnumerable<OrderPoco> GetOrders(Guid customerId);
-        OrderLine GetOrderLine(Guid id);
-        IEnumerable<DrugPoco> GetOrderLines(Guid id);
-        void SubmitOrder(OrderPoco order);
-        OrderLine AddToOrder(OrderLine orderLine);
-        void DeleteFromOrder(OrderLine orderLine);
+        Task<Order> GetCurrentOrder(Guid customerId, int status);
+        Task<OrderPoco> GetOrder(Guid id);
+        Task<IEnumerable<OrderPoco>> GetOrders(Guid customerId);
+        Task<OrderLine> GetOrderLine(Guid id);
+        Task<IEnumerable<DrugPoco>> GetOrderLines(Guid id);
+        Task SubmitOrder(OrderPoco order);
+        Task<OrderLine> AddToOrder(OrderLine orderLine);
+        Task DeleteFromOrder(OrderLine orderLine);
         
     }
 }

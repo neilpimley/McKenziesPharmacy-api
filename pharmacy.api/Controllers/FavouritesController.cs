@@ -1,6 +1,7 @@
 ﻿using System;
 using Pharmacy.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
@@ -33,15 +34,15 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // GET: api/Favourites
         [HttpGet]
-        public IEnumerable<DrugPoco> Get()
+        public async Task<IActionResult> Get()
         {
             var userID = User.Identity.Name;
-            var customer = _customerService.GetCustomerByUsername(userID);
+            var customer = await _customerService.GetCustomerByUsername(userID);
             if (customer == null)
             {
                 throw new Exception("Customer doesn't exist");
             }
-            return _service.GetFavouriteDrugs(customer.CustomerId);
+            return Ok(_service.GetFavouriteDrugs(customer.CustomerId));
         }
 
         /// <summary>  
@@ -51,10 +52,10 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // POST: api/Favourites
         [HttpPost]
-        public IActionResult Post(Favourite favourite)
+        public async Task<IActionResult> Post(Favourite favourite)
         {
             var userID = User.Identity.Name;
-            var customer = _customerService.GetCustomerByUsername(userID);
+            var customer = await _customerService.GetCustomerByUsername(userID);
             if (customer == null)
             {
                 return NotFound();
@@ -65,7 +66,7 @@ namespace Pharmacy.Controllers
 
             try
             {
-                _service.AddFavourite(favourite);
+                await _service.AddFavourite(favourite);
             }
             catch (Exception ex)
             {
@@ -82,16 +83,16 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // DELETE: api/Favourites/5
         [HttpDelete]
-        public IActionResult DeleteFavourite(Guid id)
+        public async Task<IActionResult> DeleteFavourite(Guid id)
         {
-            Favourite favourite = _service.GetFavourite(id);
+            Favourite favourite = await _service.GetFavourite(id);
             if (favourite == null)
             {
                 return NotFound();
             }
 
             try {
-                _service.DeleteFavourite(favourite.FavouriteId);
+                await _service.DeleteFavourite(favourite.FavouriteId);
             }
             catch (Exception ex) {
                 return BadRequest(ex.Message);

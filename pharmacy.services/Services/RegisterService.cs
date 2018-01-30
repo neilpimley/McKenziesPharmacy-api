@@ -2,16 +2,13 @@
 using Pharmacy.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using getAddress.Sdk;
 using getAddress.Sdk.Api.Requests;
 using getAddress.Sdk.Api.Responses;
 using Microsoft.Extensions.Options;
 using NLog;
-using Pharmacy.Config;
 using Pharmacy.Exceptions;
 using Pharmacy.Models;
 using Pharmacy.Repositories.Interfaces;
@@ -29,14 +26,13 @@ namespace Pharmacy.Services
         {
             _unitOfWork = unitOfWork;
             _apiKey = serviceSettings.Value.GetAddressApiKey;
-            AutoMapperConfig.Setup();
         }
 
-        public IEnumerable<Shop> GetShops()
+        public async Task<IEnumerable<Shop>> GetShops()
         {
             try
             {
-                return Mapper.Map<IEnumerable<Shop>>(_unitOfWork.ShopRepository.Get());
+                return await _unitOfWork.ShopRepository.Get();
             }
             catch (Exception ex)
             {
@@ -45,11 +41,11 @@ namespace Pharmacy.Services
             }
         }
 
-        public IEnumerable<Title> GetTitles()
+        public async Task<IEnumerable<Title>> GetTitles()
         {
             try
             {
-                return Mapper.Map<IEnumerable<Title>>(_unitOfWork.TitleRepository.Get());
+                return await _unitOfWork.TitleRepository.Get();
             }
             catch (Exception ex)
             {
@@ -58,11 +54,11 @@ namespace Pharmacy.Services
             }
         }
 
-        public IEnumerable<Practice> GetPractices()
+        public async Task<IEnumerable<Practice>> GetPractices()
         {
             try
             {
-                return Mapper.Map<IEnumerable<Practice>>(_unitOfWork.PracticeRepository.Get());
+                return await _unitOfWork.PracticeRepository.Get();
             }
             catch (Exception ex)
             {
@@ -71,11 +67,11 @@ namespace Pharmacy.Services
             }
         }
 
-        public IEnumerable<Doctor> GetDoctors()
+        public async Task<IEnumerable<Doctor>> GetDoctors()
         {
             try
             {
-            return Mapper.Map<IEnumerable<Doctor>>(_unitOfWork.DoctorRepository.Get());
+                return await _unitOfWork.DoctorRepository.Get();
             }
             catch (Exception ex)
             {
@@ -84,11 +80,11 @@ namespace Pharmacy.Services
             }
         }
 
-        public IEnumerable<Doctor> GetDoctorsByPractice(Guid practiceId)
+        public async Task<IEnumerable<Doctor>> GetDoctorsByPractice(Guid practiceId)
         {
             try
             {
-            return Mapper.Map<IEnumerable<Doctor>>(_unitOfWork.DoctorRepository.Get(d => d.PracticeId == practiceId));
+                return await _unitOfWork.DoctorRepository.Get(d => d.PracticeId == practiceId);
             }
             catch (Exception ex)
             {
@@ -129,7 +125,7 @@ namespace Pharmacy.Services
                     logger.Error("GetAddressesByPostcode failed for '{0}'. Error: {1}", postCode, ex.Message );
                     throw new ApiConnectionException("GetPostcodeApi");
                 }
-                            }
+            }
             return addresses;
         }
 

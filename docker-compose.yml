@@ -5,4 +5,4 @@ services:
     image: pharmacy.api
     build:
       context: ./pharmacy.api
-      dockerfile: Dockerfile
+      dockerfile:  Dockerfile

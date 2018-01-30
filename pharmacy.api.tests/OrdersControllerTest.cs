@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using Pharmacy.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -18,53 +19,53 @@ namespace Pharmacy.ControllerTests
         }
 
         [Fact]
-        public void TestGetOrder()
+        public async Task TestGetOrder()
         {
             var id = Guid.NewGuid();
 
             var controller = new OrdersController(_mockOrdersService.Object, _mockCustomersService.Object);
 
-            IActionResult actionResult = controller.GetOrder();
+            IActionResult actionResult = await controller.GetOrder();
             var contentResult = actionResult as OkResult;
 
             Assert.NotNull(contentResult);
         }
 
         [Fact]
-        public void TestGetOrderById()
+        public async Task TestGetOrderById()
         {
             var id = Guid.NewGuid();
 
             var controller = new OrdersController(_mockOrdersService.Object, _mockCustomersService.Object);
 
-            var order = controller.GetOrder(id);
+            var order = await controller.GetOrder(id);
 
             Assert.NotNull(order);
             Assert.Equal(id, order.OrderId);
         }
 
         [Fact]
-        public void TestGetOrders()
+        public async Task TestGetOrders()
         {
         }
 
         [Fact]
-        public void TestGetOrderLines()
+        public async Task TestGetOrderLines()
         {
         }
 
         [Fact]
-        public void TestSubmitOrder()
+        public async Task TestSubmitOrder()
         {
         }
 
         [Fact]
-        public void TestAddOrderLineOrder()
+        public async Task TestAddOrderLineOrder()
         {
         }
 
         [Fact]
-        public void TestDeleteOrderLine()
+        public async Task TestDeleteOrderLine()
         {
         }
     }

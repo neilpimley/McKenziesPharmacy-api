@@ -1,12 +1,12 @@
-﻿using Pharmacy.Services.Interfaces;
-using Pharmacy.Models;
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
-using AutoMapper;
 using NLog;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories.Interfaces;
+using Pharmacy.Services.Interfaces;
+using Pharmacy.Models;
 
 namespace Pharmacy.Services
 {
@@ -20,15 +20,15 @@ namespace Pharmacy.Services
             _unitOfWork = unitOfWork;
         }
 
-        public Favourite GetFavourite(Guid id) {
-            return Mapper.Map<Favourite>(_unitOfWork.FavouriteRepository.GetByID(id));
+        public async Task<Favourite> GetFavourite(Guid id) {
+            return await _unitOfWork.FavouriteRepository.GetByID(id);
         }
 
-        public IEnumerable<DrugPoco> GetFavouriteDrugs(Guid customerId)
+        public async Task<IEnumerable<DrugPoco>> GetFavouriteDrugs(Guid customerId)
         {
             logger.Info("GetFavouriteDrugs - CustomerId: {0}", customerId);
-            return (from d in _unitOfWork.DrugRepository.Get()
-                    join f in _unitOfWork.FavouriteRepository.Get() on d.DrugId equals f.DrugId
+            return (from d in await _unitOfWork.DrugRepository.Get()
+                    join f in await _unitOfWork.FavouriteRepository.Get() on d.DrugId equals f.DrugId
                     where f.CustomerId == customerId
                     select new DrugPoco()
                     {
@@ -38,13 +38,14 @@ namespace Pharmacy.Services
                     });
         }
 
-        public Favourite AddFavourite(Favourite favouriteDrug)
+        public async Task<Favourite> AddFavourite(Favourite favouriteDrug)
         {
             logger.Info("AddFavourite - CustomerId:{0}, DrugId:{1}", favouriteDrug.CustomerId, favouriteDrug.DrugId);
-            var exists = _unitOfWork.FavouriteRepository
-                .Get(filter: f => f.DrugId == favouriteDrug.CustomerId
-                    && f.CustomerId == favouriteDrug.CustomerId).Any();
-            if (exists)
+            var exists = await _unitOfWork.FavouriteRepository
+                .Get(f => f.DrugId == favouriteDrug.CustomerId
+                    && f.CustomerId == favouriteDrug.CustomerId);
+
+            if (exists.Any())
             {
                 throw new Exception("Favourite already exists");
             }
@@ -54,7 +55,7 @@ namespace Pharmacy.Services
                 _unitOfWork.FavouriteRepository.Insert(favouriteDrug);
                 try
                 {
-                    _unitOfWork.Save();
+                    await _unitOfWork.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -64,13 +65,13 @@ namespace Pharmacy.Services
             }
             return favouriteDrug;
         }
-        public void DeleteFavourite(Guid id)
+        public async Task DeleteFavourite(Guid id)
         {
             logger.Info("DeleteFavourite - FavouritID:{0}", id);
             _unitOfWork.FavouriteRepository.Delete(id);
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {
