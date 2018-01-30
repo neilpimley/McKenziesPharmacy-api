@@ -7,6 +7,9 @@
     <DockerServiceUrl>http://{ServiceIPAddress}</DockerServiceUrl>
     <DockerServiceName>pharmacy.api</DockerServiceName>
   </PropertyGroup>
+  <PropertyGroup>
+    <DockerTargetOS>Linux</DockerTargetOS>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.ci.build.yml" />
     <None Include="docker-compose.override.yml">

@@ -128,11 +128,13 @@ namespace Pharmacy.Services
             logger.Info("SubmitOrder - Status Update");
 
             // add a new status
-            var status = new OrderStatus();
-            status.OrderStatusId = Guid.NewGuid();
-            status.Status = (int)Status.Ordered;
-            status.StatusSetDate = DateTime.Now;
-            status.OrderId = order.OrderId;
+            var status = new OrderStatus()
+            {
+                OrderStatusId = Guid.NewGuid(),
+                Status = (int) Status.Ordered,
+                StatusSetDate = DateTime.Now,
+                OrderId = order.OrderId
+            };
             _unitOfWork.OrderStatusRepository.Insert(status);
             order.Items = await GetOrderLines(order.OrderId);
 
