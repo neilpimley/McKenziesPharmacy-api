@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="packages\**" />
+    <Compile Remove="pharmacy.api\**" />
+    <Content Remove="packages\**" />
+    <Content Remove="pharmacy.api\**" />
+    <EmbeddedResource Remove="packages\**" />
+    <EmbeddedResource Remove="pharmacy.api\**" />
+    <None Remove="packages\**" />
+    <None Remove="pharmacy.api\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
