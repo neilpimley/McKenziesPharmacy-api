@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pharmacy.api", "pharmacy.api\pharmacy.api.csproj", "{9CC46344-0D3B-471C-BEC8-6E4006EB57AA}"
 EndProject
@@ -23,7 +23,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jobs", "jobs", "{DB8CAE4B-623E-4736-B442-34A7D0A22E3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pharmacy.notifications", "Pharmacy.notifications\pharmacy.notifications.csproj", "{7EC8FD59-4007-44BE-9C34-B4AF648E89C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pharmacy.notifications", "Pharmacy.notifications\pharmacy.notifications.csproj", "{7EC8FD59-4007-44BE-9C34-B4AF648E89C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{6CFEF137-87EF-4745-BDE3-79F83842666D}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "pharmacy.database", "pharmacy.database\pharmacy.database.sqlproj", "{0456E5EF-E404-46CD-85F8-276975AB957D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +63,12 @@ Global
 		{7EC8FD59-4007-44BE-9C34-B4AF648E89C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EC8FD59-4007-44BE-9C34-B4AF648E89C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EC8FD59-4007-44BE-9C34-B4AF648E89C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0456E5EF-E404-46CD-85F8-276975AB957D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0456E5EF-E404-46CD-85F8-276975AB957D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0456E5EF-E404-46CD-85F8-276975AB957D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0456E5EF-E404-46CD-85F8-276975AB957D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0456E5EF-E404-46CD-85F8-276975AB957D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0456E5EF-E404-46CD-85F8-276975AB957D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +80,7 @@ Global
 		{BCFEC79D-0D3B-4E27-8C6A-09F969E5A876} = {BFCFD464-F3D6-4609-8658-CABD20EDF994}
 		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD} = {1659088F-56EB-456B-AE76-49CDDDB9244D}
 		{7EC8FD59-4007-44BE-9C34-B4AF648E89C3} = {DB8CAE4B-623E-4736-B442-34A7D0A22E3B}
+		{0456E5EF-E404-46CD-85F8-276975AB957D} = {6CFEF137-87EF-4745-BDE3-79F83842666D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E4B88390-494D-435F-99A6-A1F2FCAC4BA4}
