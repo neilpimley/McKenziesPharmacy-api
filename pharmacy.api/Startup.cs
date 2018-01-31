@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Pharmacy.Models;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories;
@@ -27,7 +28,7 @@ namespace Pharmacy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PharmacyContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Entities"]));
-
+            
             // Add application services.
             services.AddTransient<ICustomersService, CustomersService>();
             services.AddTransient<IDrugsService, DrugsService>();

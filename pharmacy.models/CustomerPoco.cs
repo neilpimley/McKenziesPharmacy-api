@@ -15,7 +15,7 @@ namespace Pharmacy.Models.Pocos
         public Doctor Doctor { get; set; }
         public Shop Shop { get; set; }
         public Address Address { get; set; }
-        public Guid PracticeID { get; set;  }
+        public Guid PracticeId { get; set;  }
 
         public string ConfirmEmail { get; set; }
         public string Password { get; set; }
