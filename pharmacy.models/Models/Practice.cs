@@ -5,11 +5,6 @@ namespace Pharmacy.Models
 {
     public partial class Practice
     {
-        public Practice()
-        {
-            Doctor = new HashSet<Doctor>();
-        }
-
         public Guid PracticeId { get; set; }
         public string PracticeName { get; set; }
         public Guid AddressId { get; set; }
@@ -17,8 +12,5 @@ namespace Pharmacy.Models
         public string EmailAddress { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
-
-        public Address Address { get; set; }
-        public ICollection<Doctor> Doctor { get; set; }
     }
 }

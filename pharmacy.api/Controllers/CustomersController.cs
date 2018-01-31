@@ -10,7 +10,7 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Customer functions of McKenzies Pharmacy API
     /// </summary>  
-    [Authorize]
+    // [Authorize]
     public class CustomersController : Controller
     {
         private readonly ICustomersService _service;
@@ -83,7 +83,7 @@ namespace Pharmacy.Controllers
         // POST: api/Customers
         [HttpPost]
         [Route("api/Customers")]
-        public async Task<IActionResult> PostCustomer(CustomerPoco customer)
+        public async Task<IActionResult> PostCustomer([FromBody]CustomerPoco customer)
         {
             try
             {

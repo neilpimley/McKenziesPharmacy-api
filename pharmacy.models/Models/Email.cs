@@ -14,7 +14,5 @@ namespace Pharmacy.Models
         public string Body { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool Sent { get; set; }
-
-        public Customer Customer { get; set; }
     }
 }

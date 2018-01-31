@@ -11,7 +11,7 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Customer functions of McKenzies Pharmacy API
     /// </summary>  
-    // [Authorize]
+    [Authorize]
     public class RegisterController : Controller
     {
         private readonly IRegisterService _service;

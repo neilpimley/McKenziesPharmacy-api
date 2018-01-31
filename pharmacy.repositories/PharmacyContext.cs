@@ -65,15 +65,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.ShopId).HasColumnName("ShopID");
 
-                entity.HasOne(d => d.Doctor)
-                    .WithMany(p => p.CollectScript)
-                    .HasForeignKey(d => d.DoctorId)
-                    .HasConstraintName("FK_dbo.CollectScript_dbo.Doctor_DoctorID");
-
-                entity.HasOne(d => d.Shop)
-                    .WithMany(p => p.CollectScript)
-                    .HasForeignKey(d => d.ShopId)
-                    .HasConstraintName("FK_dbo.CollectScript_dbo.Shop_ShopID");
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -109,27 +100,6 @@ namespace Pharmacy.Repositories
                     .HasColumnName("UserID")
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.Address)
-                    .WithMany(p => p.Customer)
-                    .HasForeignKey(d => d.AddressId)
-                    .HasConstraintName("FK_dbo.Customer_dbo.Address_AddressID");
-
-                entity.HasOne(d => d.Doctor)
-                    .WithMany(p => p.Customer)
-                    .HasForeignKey(d => d.DoctorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Customer_dbo.Doctor_DoctorID");
-
-                entity.HasOne(d => d.Shop)
-                    .WithMany(p => p.Customer)
-                    .HasForeignKey(d => d.ShopId)
-                    .HasConstraintName("FK_dbo.Customer_dbo.Shop_ShopID");
-
-                entity.HasOne(d => d.Title)
-                    .WithMany(p => p.Customer)
-                    .HasForeignKey(d => d.TitleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Customer_dbo.Title_TitleID");
             });
 
             modelBuilder.Entity<Doctor>(entity =>
@@ -158,16 +128,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.TitleId).HasColumnName("TitleID");
 
-                entity.HasOne(d => d.Practice)
-                    .WithMany(p => p.Doctor)
-                    .HasForeignKey(d => d.PracticeId)
-                    .HasConstraintName("FK_dbo.Doctor_dbo.Practice_PracticeID");
-
-                entity.HasOne(d => d.Title)
-                    .WithMany(p => p.Doctor)
-                    .HasForeignKey(d => d.TitleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Doctor_dbo.Title_TitleID");
             });
 
             modelBuilder.Entity<Drug>(entity =>
@@ -208,11 +168,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.ToAddress).HasMaxLength(128);
 
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.EmailNavigation)
-                    .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Email_dbo.Customer_CustomerID");
             });
 
             modelBuilder.Entity<Favourite>(entity =>
@@ -233,15 +188,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.DrugId).HasColumnName("DrugID");
 
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Favourite)
-                    .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_dbo.Favourite_dbo.Customer_CustomerID");
-
-                entity.HasOne(d => d.Drug)
-                    .WithMany(p => p.Favourite)
-                    .HasForeignKey(d => d.DrugId)
-                    .HasConstraintName("FK_dbo.Favourite_dbo.Drug_DrugID");
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -271,15 +217,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_dbo.Order_dbo.Customer_CustomerID");
-
-                entity.HasOne(d => d.Note)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.NoteId)
-                    .HasConstraintName("FK_dbo.Order_dbo.Note_NoteID");
             });
 
             modelBuilder.Entity<OrderLine>(entity =>
@@ -300,15 +237,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.HasOne(d => d.Drug)
-                    .WithMany(p => p.OrderLine)
-                    .HasForeignKey(d => d.DrugId)
-                    .HasConstraintName("FK_dbo.OrderLine_dbo.Drug_DrugID");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderLine)
-                    .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK_dbo.OrderLine_dbo.Order_OrderID");
             });
 
             modelBuilder.Entity<OrderStatus>(entity =>
@@ -326,10 +254,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderStatusNavigation)
-                    .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK_dbo.OrderStatus_dbo.Order_OrderID");
             });
 
             modelBuilder.Entity<Practice>(entity =>
@@ -353,11 +277,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.PracticeName).HasMaxLength(256);
 
-                entity.HasOne(d => d.Address)
-                    .WithMany(p => p.Practice)
-                    .HasForeignKey(d => d.AddressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Practice_dbo.Address_AddressID");
             });
 
             modelBuilder.Entity<Reminder>(entity =>
@@ -385,17 +304,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.ReminderId).HasColumnName("ReminderID");
 
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.ReminderOrder)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__dbo.ReminderOrder__dbo.Reminder_OrderID");
-
-                entity.HasOne(d => d.Reminder)
-                    .WithMany(p => p.ReminderOrder)
-                    .HasForeignKey(d => d.ReminderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ReminderO__Remin__3E52440B");
             });
 
             modelBuilder.Entity<Shop>(entity =>
@@ -413,11 +321,6 @@ namespace Pharmacy.Repositories
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Address)
-                    .WithMany(p => p.Shop)
-                    .HasForeignKey(d => d.AddressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Shop_dbo.Address_AddressID");
             });
 
             modelBuilder.Entity<Title>(entity =>

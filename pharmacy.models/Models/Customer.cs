@@ -5,13 +5,6 @@ namespace Pharmacy.Models
 {
     public partial class Customer
     {
-        public Customer()
-        {
-            EmailNavigation = new HashSet<Email>();
-            Favourite = new HashSet<Favourite>();
-            Order = new HashSet<Order>();
-        }
-
         public Guid CustomerId { get; set; }
         public string UserId { get; set; }
         public string Email { get; set; }
@@ -28,13 +21,5 @@ namespace Pharmacy.Models
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public bool Active { get; set; }
-
-        public Address Address { get; set; }
-        public Doctor Doctor { get; set; }
-        public Shop Shop { get; set; }
-        public Title Title { get; set; }
-        public ICollection<Email> EmailNavigation { get; set; }
-        public ICollection<Favourite> Favourite { get; set; }
-        public ICollection<Order> Order { get; set; }
     }
 }

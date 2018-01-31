@@ -14,8 +14,5 @@ namespace Pharmacy.Models
         public Guid DoctorId { get; set; }
         public Guid ShopId { get; set; }
         public string Notes { get; set; }
-
-        public Doctor Doctor { get; set; }
-        public Shop Shop { get; set; }
     }
 }

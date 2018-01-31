@@ -5,12 +5,6 @@ namespace Pharmacy.Models
 {
     public partial class Doctor
     {
-        public Doctor()
-        {
-            CollectScript = new HashSet<CollectScript>();
-            Customer = new HashSet<Customer>();
-        }
-
         public Guid DoctorId { get; set; }
         public Guid PracticeId { get; set; }
         public Guid TitleId { get; set; }
@@ -21,7 +15,5 @@ namespace Pharmacy.Models
 
         public Practice Practice { get; set; }
         public Title Title { get; set; }
-        public ICollection<CollectScript> CollectScript { get; set; }
-        public ICollection<Customer> Customer { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 using Pharmacy.Models;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories;
@@ -76,7 +78,12 @@ namespace Pharmacy
                 options.Audience = Configuration["Auth0:ApiIdentifier"];
             });
 
-            services.AddMvc();
+            services.AddMvc()
+            /*    .AddMvcOptions(options =>
+                {
+                    options.InputFormatters.Add(new ());
+                });*/
+            ;
             services.AddCors();
         }
 

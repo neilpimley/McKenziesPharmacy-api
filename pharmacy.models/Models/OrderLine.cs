@@ -11,8 +11,5 @@ namespace Pharmacy.Models
         public int Qty { get; set; }
         public DateTime CreatedOn { get; set; }
         public int? OrderLineStatus { get; set; }
-
-        public Drug Drug { get; set; }
-        public Order Order { get; set; }
     }
 }
