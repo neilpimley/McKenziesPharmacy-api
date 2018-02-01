@@ -13,5 +13,7 @@ namespace Pharmacy.Models
         public string TwilloNumber { get; set; }
 
         public string GetAddressApiKey { get; set; }
+
+        public string AllowedPostcodes { get; set; }
     }
 }

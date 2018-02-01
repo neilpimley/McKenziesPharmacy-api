@@ -8,6 +8,7 @@ using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories.Interfaces;
 using Pharmacy.Services.Interfaces;
 using Pharmacy.Models;
+using Microsoft.Extensions.Options;
 
 namespace Pharmacy.Services
 {
@@ -17,12 +18,16 @@ namespace Pharmacy.Services
         private readonly IEmailService _emailService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IMapper _mapper;
+        private readonly string[] _allowedPostcodes;
+        private static readonly char[] Digits = "0123456789".ToCharArray();
 
-        public CustomersService(IUnitOfWork unitOfWork, IEmailService emailService, IMapper mapper)
+        public CustomersService(IUnitOfWork unitOfWork, IEmailService emailService, IMapper mapper,
+            IOptions<ServiceSettings> serviceSettings)
         {
             _unitOfWork = unitOfWork;
             _emailService = emailService;
             _mapper = mapper;
+            _allowedPostcodes = serviceSettings.Value.AllowedPostcodes.Split(",");
         }
 
         public async Task<CustomerPoco> GetCustomerByUsername(string username)
@@ -145,6 +150,14 @@ namespace Pharmacy.Services
                 return errors;
             }
 
+            var existingMobile = await EmailExists(customer.Email);
+            if (existingMobile)
+            {
+                logger.Info("Customer with mobile {0} has already been registered", customer.Mobile);
+                errors.Add("Mobile has already been registered");
+                return errors;
+            }
+
             var existingCustomer = await CustomerExists(customer);
             if (existingCustomer)
             {
@@ -159,15 +172,54 @@ namespace Pharmacy.Services
             {
                 logger.Info("Customer ({0} - {1}) with email the same name, dob and doctor has already been registered",
                     customer.Fullname, customer.Dob);
-                errors.Add("Customer has already registered with a different email address");
+                errors.Add("A customer must be 18 years old to use this service");
+            }
+
+            var validPostcode = ValidPostcode(customer.Address.Postcode);
+            if (validPostcode == "")
+            {
+                logger.Info("Customer '{0}' - {1} is not in allowed list of postcodes.",
+                    customer.Fullname, customer.Address.Postcode);
+                errors.Add("Postcode '{0}' is invalid.");
+            }
+            else
+            {
+                if (!AllowedArea(validPostcode))
+                {
+                    logger.Info("Customer '{0}' - {1} is not in allowed list of postcodes.",
+                        customer.Fullname, customer.Address.Postcode);
+                    errors.Add("The service is currently not available in the area you live in");
+                }
             }
 
             return errors;
         }
 
+        private string ValidPostcode(string postcode)
+        {
+            var noSpaces = postcode.Replace(" ", "");
+            var lastDigit = noSpaces.LastIndexOfAny(Digits);
+            if (lastDigit == -1)
+            {
+                return "";
+            }
+            return noSpaces.Insert(lastDigit, " ");
+        }
+
+        private bool AllowedArea(string validPostcode)
+        {
+            return Array.Exists(_allowedPostcodes, element => element == validPostcode.Split(" ")[0]);
+        }
+
         private async Task<bool> EmailExists(string email)
         {
             var customers = await _unitOfWork.CustomerRepository.Get(c => c.Email == email);
+            return customers.Any();
+        }
+
+        private async Task<bool> MobileExists(string mobile)
+        {
+            var customers = await _unitOfWork.CustomerRepository.Get(c => c.Mobile == mobile);
             return customers.Any();
         }
 
@@ -181,7 +233,7 @@ namespace Pharmacy.Services
             return customers.Any();
         }
 
-        int GetAge(DateTime bornDate)
+        private int GetAge(DateTime bornDate)
         {
             DateTime today = DateTime.Today;
             int age = today.Year - bornDate.Year;
