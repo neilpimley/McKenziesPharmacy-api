@@ -1,6 +1,7 @@
 ﻿using Pharmacy.Models;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -38,7 +39,7 @@ namespace Pharmacy.Controllers
         [HttpGet]
         public async Task<IEnumerable<ReminderPoco>> GetCustomerReminders(Guid id)
         {
-            var userId = User.Identity.Name;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             Customer customer = _customersService.GetCustomerByUsername(userId).Result;
             if (customer == null)
             {

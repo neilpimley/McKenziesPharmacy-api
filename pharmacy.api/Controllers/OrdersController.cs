@@ -1,6 +1,8 @@
 ﻿using System;
 using Pharmacy.Models;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
@@ -33,7 +35,7 @@ namespace Pharmacy.Controllers
         [Route("api/Order")]
         public async Task<IActionResult> GetOrder()
         {
-            var userId = User.Identity.Name;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var customer = await _customersService.GetCustomerByUsername(userId);
             if (customer == null)
             {

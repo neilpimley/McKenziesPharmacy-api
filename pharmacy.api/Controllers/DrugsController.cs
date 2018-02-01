@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
@@ -35,11 +36,11 @@ namespace Pharmacy.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDrugs(string drugName)
         {
-            if (User.Identity.Name == null)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (userId == null)
             {
                 return BadRequest("You must be logged in to search for drugs");
             }
-            var userId = User.Identity.Name;
             var customer = await _customerService.GetCustomerByUsername(userId);
             return Ok(await _service.GetDrugs(customer.CustomerId, drugName));
         }
