@@ -85,6 +85,11 @@ namespace Pharmacy.Controllers
         [Route("api/Customers")]
         public async Task<IActionResult> PostCustomer([FromBody]CustomerPoco customer)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 customer = await _service.RegisterCustomer(customer);

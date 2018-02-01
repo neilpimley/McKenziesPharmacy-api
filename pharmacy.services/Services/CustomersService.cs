@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
@@ -61,6 +62,13 @@ namespace Pharmacy.Services
         public async Task<CustomerPoco> RegisterCustomer(CustomerPoco customer)
         {
             logger.Info("RegisterCustomer - {0}", customer.Fullname);
+
+            IList<string> registerErrors = await ValidateCustomer(customer);
+            if (registerErrors.Count > 0)
+            {
+                throw new Exception(registerErrors[0]);
+            }
+
             customer.CustomerId = Guid.NewGuid();
             customer.CreatedOn = DateTime.Now;
             customer.AddressId = Guid.NewGuid();
@@ -125,6 +133,63 @@ namespace Pharmacy.Services
                 throw new Exception(ex.Message);
             }
         }
-    }
+
+        private async Task<List<string>> ValidateCustomer(CustomerPoco customer)
+        {
+            var errors = new List<string>();
+            var existingEmail = await EmailExists(customer.Email);
+            if (existingEmail)
+            {
+                logger.Info("Customer with email {0} has already been registered", customer.Email);
+                errors.Add("Email address has already been registered");
+                return errors;
+            }
+
+            var existingCustomer = await CustomerExists(customer);
+            if (existingCustomer)
+            {
+                logger.Info("Customer ({0} - {1}) with email the same name, dob and doctor has already been registered", 
+                    customer.Fullname, customer.Dob);
+                errors.Add("Customer has already registered with a different email address");
+                return errors;
+            }
+
+            var age = GetAge(customer.Dob);
+            if (age < 18)
+            {
+                logger.Info("Customer ({0} - {1}) with email the same name, dob and doctor has already been registered",
+                    customer.Fullname, customer.Dob);
+                errors.Add("Customer has already registered with a different email address");
+            }
+
+            return errors;
+        }
+
+        private async Task<bool> EmailExists(string email)
+        {
+            var customers = await _unitOfWork.CustomerRepository.Get(c => c.Email == email);
+            return customers.Any();
+        }
+
+        private async Task<bool> CustomerExists(CustomerPoco customer)
+        {
+            var customers = await _unitOfWork.CustomerRepository
+                .Get(c => c.Firstname == customer.Firstname 
+                    && c.Lastname == customer.Lastname
+                          && c.Dob == customer.Dob
+                          && c.DoctorId == customer.DoctorId);
+            return customers.Any();
+        }
+
+        int GetAge(DateTime bornDate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - bornDate.Year;
+            if (bornDate > today.AddYears(-age))
+                age--;
+
+            return age;
+        }
+}
     
 }
