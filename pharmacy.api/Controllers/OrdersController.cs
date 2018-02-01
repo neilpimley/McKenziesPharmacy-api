@@ -62,7 +62,7 @@ namespace Pharmacy.Controllers
         [Route("api/Orders")]
         public async Task<IEnumerable<Order>> GetOrders()
         {
-            var userId = User.Identity.Name;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var customer = _customersService.GetCustomerByUsername(userId).Result;
             if (customer == null)
             {

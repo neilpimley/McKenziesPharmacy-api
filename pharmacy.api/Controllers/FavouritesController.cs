@@ -1,6 +1,7 @@
 ﻿using System;
 using Pharmacy.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
@@ -36,8 +37,8 @@ namespace Pharmacy.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var userID = User.Identity.Name;
-            var customer = await _customerService.GetCustomerByUsername(userID);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var customer = await _customerService.GetCustomerByUsername(userId);
             if (customer == null)
             {
                 throw new Exception("Customer doesn't exist");
@@ -54,8 +55,8 @@ namespace Pharmacy.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Favourite favourite)
         {
-            var userID = User.Identity.Name;
-            var customer = await _customerService.GetCustomerByUsername(userID);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var customer = await _customerService.GetCustomerByUsername(userId);
             if (customer == null)
             {
                 return NotFound();

@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Auth0.AuthenticationApi" Version="4.3.1" />
+    <PackageReference Include="Auth0.ManagementApi" Version="4.10.1" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="getAddress.Sdk" Version="1.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />

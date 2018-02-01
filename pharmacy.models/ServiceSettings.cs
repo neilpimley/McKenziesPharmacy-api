@@ -15,5 +15,10 @@ namespace Pharmacy.Models
         public string GetAddressApiKey { get; set; }
 
         public string AllowedPostcodes { get; set; }
+
+        public string Auth0Domain { get; set; }
+        public string Auth0ClientId { get; set; }
+        public string Auth0ApiIdentifier { get; set; }
+        public string Auth0ClientSecret { get; set; }
     }
 }

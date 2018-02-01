@@ -9,6 +9,10 @@ using Pharmacy.Repositories.Interfaces;
 using Pharmacy.Services.Interfaces;
 using Pharmacy.Models;
 using Microsoft.Extensions.Options;
+using Auth0.ManagementApi;
+using Auth0.ManagementApi.Models;
+using Auth0.AuthenticationApi;
+using Auth0.AuthenticationApi.Models;
 
 namespace Pharmacy.Services
 {
@@ -20,6 +24,9 @@ namespace Pharmacy.Services
         private readonly IMapper _mapper;
         private readonly string[] _allowedPostcodes;
         private static readonly char[] Digits = "0123456789".ToCharArray();
+        private readonly string _auth0Domain;
+        private readonly string _auth0ClientId;
+        private readonly string _authClientSecret;
 
         public CustomersService(IUnitOfWork unitOfWork, IEmailService emailService, IMapper mapper,
             IOptions<ServiceSettings> serviceSettings)
@@ -28,6 +35,9 @@ namespace Pharmacy.Services
             _emailService = emailService;
             _mapper = mapper;
             _allowedPostcodes = serviceSettings.Value.AllowedPostcodes.Split(",");
+            _auth0Domain = serviceSettings.Value.Auth0Domain;
+            _auth0ClientId = serviceSettings.Value.Auth0ClientId;
+            _authClientSecret = serviceSettings.Value.Auth0ClientSecret;
         }
 
         public async Task<CustomerPoco> GetCustomerByUsername(string username)
@@ -86,6 +96,7 @@ namespace Pharmacy.Services
             try
             {
                 await _unitOfWork.SaveAsync();
+                await UpdateUserMetaData(customer);
                 customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
                 customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
                 customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
@@ -137,6 +148,37 @@ namespace Pharmacy.Services
                 logger.Error("ActivateCustomer - {0}", ex.Message);
                 throw new Exception(ex.Message);
             }
+        }
+
+
+        private async Task<AccessTokenResponse> GetToken()
+        {
+            var uri = new Uri(String.Format("https://{0}/oauth/token", _auth0Domain));
+            var client = new AuthenticationApiClient(uri);
+            var request = new AuthorizationCodeTokenRequest()
+            {
+                ClientId = _auth0ClientId,
+                ClientSecret = _authClientSecret
+            };
+            return await client.GetTokenAsync(request);
+        }
+
+        private async Task UpdateUserMetaData(CustomerPoco customer)
+        {
+            var token = await GetToken();
+            var uri = new Uri(String.Format("https://{0}/api/v2", _auth0Domain));
+            var client = new ManagementApiClient(token.IdToken, uri);
+            var request = new UserUpdateRequest {
+                UserMetadata =
+                {
+                    customer_id = customer.CustomerId,
+                    address_id = customer.AddressId,
+                    doctor_id = customer.DoctorId,
+                    shop_id = customer.ShopId,
+                    signed_up = true
+                }
+            };
+            await client.Users.UpdateAsync(customer.UserId, request);
         }
 
         private async Task<List<string>> ValidateCustomer(CustomerPoco customer)

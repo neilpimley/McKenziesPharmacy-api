@@ -18,3 +18,40 @@ Frontend application in Angular 4/5 lives here: https://github.com/neilpimley/Mc
 - Core Services ( .NET Core 2.0, EF Core - services / respositories / models)
 - Database (DB deployment project)
 - Tests (XUnit / integraton)
+
+## Applicatoin settings required in azurewebsites
+
+
+In the local dev environment use "manage user secrets" in Visual Studio and add the following to secrets.json
+
+{
+    "ConnectionStrings": {
+        "Entities": ""
+    },
+    "ServiceSettings": {
+        "SendGridApiKey": "",
+        "TwilloAccountSid": "",
+        "TwilloAuthToken": "",
+        "TwilloNumber": "",
+        "GetAddressApiKey": "",
+        "AllowedPostcodes": "BT1,BT2,BT3,BT4,BT5,BT6,BT7,BT8,BT9,BT10,BT11,BT12,BT13,BT14,BT15,BT16,BT17",
+        "Auth0Domain": "",
+        "Auth0ClientID": "",
+        "Auth0ApiIdentifier": "",
+        "Auth0ClientSecret": ""
+    }
+}
+
+If hosted in Azure add the application settings below
+
+ServiceSettings:SendGridApiKey
+ServiceSettings:TwilloAccountSid
+ServiceSettings:TwilloAuthToken
+ServiceSettings:TwilloNumber
+ServiceSettings:GetAddressApiKey
+ServiceSettings:AllowedPostcodes
+ServiceSettings:Auth0Domain
+ServiceSettings:Auth0ClientID
+ServiceSettings:Auth0ApiIdentifier
+ServiceSettings:Auth0ClientSecret
+    

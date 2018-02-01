@@ -63,10 +63,9 @@ namespace Pharmacy
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-            // TODO: find a workaround to having this regferenced here so I can decouple application
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            string domain = $"https://{Configuration["Auth0:Domain"]}/";
+            string domain = $"https://{Configuration["ServerSettings:Auth0Domain"]}/";
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,15 +74,10 @@ namespace Pharmacy
             }).AddJwtBearer(options =>
             {
                 options.Authority = domain;
-                options.Audience = Configuration["Auth0:ApiIdentifier"];
+                options.Audience = Configuration["ServerSettings:Auth0ApiIdentifier"];
             });
 
-            services.AddMvc()
-            /*    .AddMvcOptions(options =>
-                {
-                    options.InputFormatters.Add(new ());
-                });*/
-            ;
+            services.AddMvc();
             services.AddCors();
         }
 
