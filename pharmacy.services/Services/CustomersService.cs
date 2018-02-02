@@ -168,7 +168,7 @@ namespace Pharmacy.Services
                 client_secret = _authClientSecret,
                 audience = $"https://{_auth0Domain}/api/v2/",
                 grant_type = "client_credentials",
-                token_endpoint_auth_method = "client_secret_basic"
+                token_endpoint_auth_method = "client_secret_post"
             });
 
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
