@@ -65,7 +65,7 @@ namespace Pharmacy
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            string domain = $"https://{Configuration["ServerSettings:Auth0Domain"]}/";
+            string domain = $"https://{Configuration["Auth0:Domain"]}/";
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,7 +74,7 @@ namespace Pharmacy
             }).AddJwtBearer(options =>
             {
                 options.Authority = domain;
-                options.Audience = Configuration["ServerSettings:Auth0ApiIdentifier"];
+                options.Audience = Configuration["Auth0:ApiIdentifier"];
             });
 
             services.AddMvc();

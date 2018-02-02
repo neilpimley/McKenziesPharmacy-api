@@ -6,6 +6,8 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <AssemblyName>pharmacyapi</AssemblyName>
     <RootNamespace>Pharmacy</RootNamespace>
+    <ApplicationInsightsResourceId>/subscriptions/280b39fc-39af-41a2-bdf7-f955da87f9b0/resourcegroups/mckenzes.resources/providers/microsoft.insights/components/McKenziesSPA</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/280b39fc-39af-41a2-bdf7-f955da87f9b0/resourcegroups/mckenzes.resources/providers/microsoft.insights/components/McKenziesSPA</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
@@ -45,6 +48,10 @@
     <ProjectReference Include="..\pharmacy.services\pharmacy.services.csproj">
       <Private>true</Private>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

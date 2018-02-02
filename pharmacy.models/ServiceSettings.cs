@@ -20,5 +20,6 @@ namespace Pharmacy.Models
         public string Auth0ClientId { get; set; }
         public string Auth0ApiIdentifier { get; set; }
         public string Auth0ClientSecret { get; set; }
+        public string Auth0Audiencet { get; set; }
     }
 }

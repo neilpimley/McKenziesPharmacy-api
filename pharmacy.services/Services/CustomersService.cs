@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using AutoMapper;
 using NLog;
 using Pharmacy.Models.Pocos;
@@ -9,10 +12,11 @@ using Pharmacy.Repositories.Interfaces;
 using Pharmacy.Services.Interfaces;
 using Pharmacy.Models;
 using Microsoft.Extensions.Options;
-using Auth0.ManagementApi;
-using Auth0.ManagementApi.Models;
 using Auth0.AuthenticationApi;
 using Auth0.AuthenticationApi.Models;
+using Auth0.ManagementApi;
+using Auth0.ManagementApi.Models;
+using Newtonsoft.Json;
 
 namespace Pharmacy.Services
 {
@@ -100,6 +104,7 @@ namespace Pharmacy.Services
                 customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
                 customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
                 customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
+                await _emailService.SendRegisterConfirmation(customer);
             }
             catch (Exception ex)
             {
@@ -150,24 +155,40 @@ namespace Pharmacy.Services
             }
         }
 
-
-        private async Task<AccessTokenResponse> GetToken()
+        private async Task<string> GetToken()
         {
-            var uri = new Uri(String.Format("https://{0}/oauth/token", _auth0Domain));
-            var client = new AuthenticationApiClient(uri);
-            var request = new AuthorizationCodeTokenRequest()
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string payload = JsonConvert.SerializeObject(new
             {
-                ClientId = _auth0ClientId,
-                ClientSecret = _authClientSecret
-            };
-            return await client.GetTokenAsync(request);
+                client_id = _auth0ClientId,
+                client_secret = _authClientSecret,
+                audience = $"https://{_auth0Domain}/api/v2/",
+                grant_type = "client_credentials",
+                token_endpoint_auth_method = "client_secret_basic"
+            });
+
+            var content = new StringContent(payload, Encoding.UTF8, "application/json");
+            var stringTask = client.PostAsync($"https://{_auth0Domain}/oauth/token", content);
+
+            var msg = await stringTask;
+            var result = await msg.Content.ReadAsStringAsync();
+            // TODO find a working method
+            // fails with "error":"unauthorized_client","error_description":"Grant type 'client_credentials' not allowed for the client.","error_uri":"https://auth0.com/docs/clients/client-grant-types"}
+
+
+            var token = JsonConvert.DeserializeObject<dynamic>(result);
+
+            return token.access_token;
         }
 
         private async Task UpdateUserMetaData(CustomerPoco customer)
         {
             var token = await GetToken();
-            var uri = new Uri(String.Format("https://{0}/api/v2", _auth0Domain));
-            var client = new ManagementApiClient(token.IdToken, uri);
+            var client = new ManagementApiClient(token, new Uri($"https://{_auth0Domain}"));
             var request = new UserUpdateRequest {
                 UserMetadata =
                 {
@@ -178,8 +199,17 @@ namespace Pharmacy.Services
                     signed_up = true
                 }
             };
-            await client.Users.UpdateAsync(customer.UserId, request);
+            try
+            {
+                await client.Users.UpdateAsync(customer.UserId, request);
+            }
+            catch (Exception ex)
+            {
+                logger.Info("Updating user meta_data in Auth0 failed: {0}", ex.Message);
+            }
         }
+
+       
 
         private async Task<List<string>> ValidateCustomer(CustomerPoco customer)
         {

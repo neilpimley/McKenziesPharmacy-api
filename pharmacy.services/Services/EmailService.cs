@@ -23,7 +23,7 @@ namespace Pharmacy.Services
 
         public async Task SendRegisterConfirmation(CustomerPoco customer)
         {
-            logger.Info("SendPersonalDetailsAmended - email: {0}", customer.Email);
+            logger.Info("SendRegisterConfirmation - email: {0}", customer.Email);
             var client = new SendGridClient(_apiKey);
             var from = new EmailAddress("prescriptions@mckenziespharmacy.com", "McKenzies Pharmacy");
             var subject = "Registration Confirmation - McKenzies Pharmacy";
