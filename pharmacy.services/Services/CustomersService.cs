@@ -101,9 +101,6 @@ namespace Pharmacy.Services
             {
                 await _unitOfWork.SaveAsync();
                 await UpdateUserMetaData(customer);
-                customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
-                customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
-                customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
                 await _emailService.SendRegisterConfirmation(customer);
             }
             catch (Exception ex)
@@ -111,6 +108,9 @@ namespace Pharmacy.Services
                 logger.Error("RegisterCustomer - {0}", ex.Message);
                 throw new Exception(ex.Message);
             }
+            customer.Title = await _unitOfWork.TitleRepository.GetByID(_customer.TitleId);
+            customer.Shop = await _unitOfWork.ShopRepository.GetByID(_customer.ShopId);
+            customer.Doctor = await _unitOfWork.DoctorRepository.GetByID(_customer.DoctorId);
             return customer;
         }
 
@@ -133,7 +133,7 @@ namespace Pharmacy.Services
 
         public async Task ActivateCustomer(Guid id, string mobileVerificationCode)
         {
-            logger.Info("ActiveateCustomer - {0}", id);
+            logger.Info("ActivateCustomer - {0}", id);
             var customers = await _unitOfWork.CustomerRepository.Get(x => x.CustomerId == id);
             var customer = customers.FirstOrDefault();
             if (customer == null)
@@ -218,15 +218,15 @@ namespace Pharmacy.Services
             if (existingEmail)
             {
                 logger.Info("Customer with email {0} has already been registered", customer.Email);
-                errors.Add("Email address has already been registered");
+                errors.Add("This email address has already been registered");
                 return errors;
             }
 
-            var existingMobile = await EmailExists(customer.Email);
+            var existingMobile = await MobileExists(customer.Mobile);
             if (existingMobile)
             {
                 logger.Info("Customer with mobile {0} has already been registered", customer.Mobile);
-                errors.Add("Mobile has already been registered");
+                errors.Add("This mobile number has already been registered");
                 return errors;
             }
 
@@ -235,7 +235,7 @@ namespace Pharmacy.Services
             {
                 logger.Info("Customer ({0} - {1}) with email the same name, dob and doctor has already been registered", 
                     customer.Fullname, customer.Dob);
-                errors.Add("Customer has already registered with a different email address");
+                errors.Add("It looks like you have already registered with a different email address");
                 return errors;
             }
 
@@ -244,7 +244,7 @@ namespace Pharmacy.Services
             {
                 logger.Info("Customer ({0} - {1}) with email the same name, dob and doctor has already been registered",
                     customer.Fullname, customer.Dob);
-                errors.Add("A customer must be 18 years old to use this service");
+                errors.Add("You must be at least 18 years old to use this service");
             }
 
             var validPostcode = ValidPostcode(customer.Address.Postcode);
@@ -252,7 +252,7 @@ namespace Pharmacy.Services
             {
                 logger.Info("Customer '{0}' - {1} is not in allowed list of postcodes.",
                     customer.Fullname, customer.Address.Postcode);
-                errors.Add("Postcode '{0}' is invalid.");
+                errors.Add("The postcode '{0}' is invalid.");
             }
             else
             {
