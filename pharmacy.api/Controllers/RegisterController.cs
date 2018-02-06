@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Services.Interfaces;
 using Pharmacy.Models;
 using Microsoft.AspNetCore.Mvc;
-
 namespace Pharmacy.Controllers
 {
     /// <summary>  

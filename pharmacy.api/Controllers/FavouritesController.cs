@@ -41,7 +41,7 @@ namespace Pharmacy.Controllers
             var customer = await _customerService.GetCustomerByUsername(userId);
             if (customer == null)
             {
-                throw new Exception("Customer doesn't exist");
+                return NotFound("Customer is not logged in");
             }
             return Ok(_service.GetFavouriteDrugs(customer.CustomerId));
         }
@@ -53,13 +53,13 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // POST: api/Favourites
         [HttpPost]
-        public async Task<IActionResult> Post(Favourite favourite)
+        public async Task<IActionResult> Post([FromBody]Favourite favourite)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var customer = await _customerService.GetCustomerByUsername(userId);
             if (customer == null)
             {
-                return NotFound();
+                return NotFound("Customer is not logged in");
             }
             favourite.FavouriteId = Guid.NewGuid();
             favourite.CustomerId = customer.CustomerId;
@@ -74,7 +74,7 @@ namespace Pharmacy.Controllers
                 return BadRequest(ex.Message); ;
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = favourite.FavouriteId }, favourite);
+            return Ok(favourite);
         }
 
         /// <summary>  
@@ -84,12 +84,13 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // DELETE: api/Favourites/5
         [HttpDelete]
-        public async Task<IActionResult> DeleteFavourite(Guid id)
+        [Route("api/Favourites/{id}")]
+        public async Task<IActionResult> Delete([FromQuery]Guid id)
         {
             Favourite favourite = await _service.GetFavourite(id);
             if (favourite == null)
             {
-                return NotFound();
+                return NotFound("Favourite has already been removed");
             }
 
             try {

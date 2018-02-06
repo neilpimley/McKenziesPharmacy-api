@@ -20,8 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\pharmacy.api\pharmacy.api.csproj" />
-    <ProjectReference Include="..\pharmacy.models\pharmacy.models.csproj" />
-    <ProjectReference Include="..\pharmacy.services\pharmacy.services.csproj" />
   </ItemGroup>
 
 </Project>

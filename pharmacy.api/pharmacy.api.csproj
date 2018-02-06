@@ -27,6 +27,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="McKenzies.Pharmacy.Models" Version="1.0.0-CI00006" />
+    <PackageReference Include="McKenzies.Pharmacy.Repositories" Version="1.0.0-CI00006" />
+    <PackageReference Include="McKenzies.Pharmacy.services" Version="1.0.0-CI00006" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.1" />
@@ -39,15 +42,6 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\pharmacy.models\pharmacy.models.csproj">
-      <Private>true</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\pharmacy.services\pharmacy.services.csproj">
-      <Private>true</Private>
-    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

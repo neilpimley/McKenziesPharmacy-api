@@ -109,7 +109,7 @@ namespace Pharmacy.Controllers
         // POST: api/Orders
         [HttpPost]
         [Route("api/OrderLines")]
-        public async Task<IActionResult> AddOrderLineOrder(OrderLine orderLine)
+        public async Task<IActionResult> AddOrderLineOrder([FromBody]OrderLine orderLine)
         {
             if (!ModelState.IsValid)
             {
