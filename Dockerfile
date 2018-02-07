@@ -16,3 +16,5 @@ FROM microsoft/aspnetcore:2.0
 WORKDIR /app
 COPY --from=build-env /app/pharmacy.api/out .
 ENTRYPOINT ["dotnet", "pharmacyapi.dll"]
+
+EXPOSE 80
