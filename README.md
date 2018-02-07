@@ -1,6 +1,7 @@
 <a href="http://mckenziespharmacy.azurewebsites.net/">
-<h2>![Alt logo](https://github.com/neilpimley/McKenziesPharmacy-ui/raw/master/src/assets/images/cross.png)
-McKenzies Pharmacy</h2>
+    <h2>
+        <img src="https://github.com/neilpimley/McKenziesPharmacy-ui/raw/master/src/assets/images/cross.png" height="20" />
+    McKenzies Pharmacy</h2>
 </a>
 
 Prescription Re-ordering Service
