@@ -13,7 +13,6 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Users favourites functions of McKenzies Pharmacy API
     /// </summary>  
-    [Route("api/Favourites")]
     [Authorize]
     public class FavouritesController : Controller
     {
@@ -35,6 +34,7 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // GET: api/Favourites
         [HttpGet]
+        [Route("api/Favourites")]
         public async Task<IActionResult> Get()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -53,6 +53,7 @@ namespace Pharmacy.Controllers
         /// <returns code="200"></returns>  
         // POST: api/Favourites
         [HttpPost]
+        [Route("api/Favourites")]
         public async Task<IActionResult> Post([FromBody]Favourite favourite)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -85,7 +86,7 @@ namespace Pharmacy.Controllers
         // DELETE: api/Favourites/5
         [HttpDelete]
         [Route("api/Favourites/{id}")]
-        public async Task<IActionResult> Delete([FromQuery]Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             Favourite favourite = await _service.GetFavourite(id);
             if (favourite == null)
