@@ -1,6 +1,7 @@
 <a href="http://mckenziespharmacy.azurewebsites.net/">
-<h2>
-    <img src="http://mckenziespharmacy.azurewebsites.net/assets/images/cross.png" alt="McKenzies Pharmacy logo" title="McKenzies Pharmacy" height="20" /> McKenzies Pharmacy</h2>
+    <h2>
+        <img src="https://github.com/neilpimley/McKenziesPharmacy-ui/raw/master/src/assets/images/cross.png" height="20" />
+    McKenzies Pharmacy</h2>
 </a>
 
 Prescription Re-ordering Service
@@ -21,9 +22,8 @@ Frontend application in Angular 4/5 lives here: https://github.com/neilpimley/Mc
 
 ## Applicatoin settings required in azurewebsites
 
-
 In the local dev environment use "manage user secrets" in Visual Studio and add the following to secrets.json
-
+```json
 {
     "ConnectionStrings": {
         "Entities": ""
@@ -41,7 +41,7 @@ In the local dev environment use "manage user secrets" in Visual Studio and add 
         "Auth0ClientSecret": ""
     }
 }
-
+```
 If hosted in Azure add the application settings below
 
 ServiceSettings:SendGridApiKey
@@ -54,4 +54,11 @@ ServiceSettings:Auth0Domain
 ServiceSettings:Auth0ClientID
 ServiceSettings:Auth0ApiIdentifier
 ServiceSettings:Auth0ClientSecret
-    
+
+## Docker
+To run in docker 
+```
+> docker build -t mckenzies .
+> docker run -d -p 8080:80 --name pharmacyapi mckenzies
+```
+
