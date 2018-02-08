@@ -1,10 +1,8 @@
 ﻿using System;
 using Pharmacy.Models;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +41,7 @@ namespace Pharmacy.Controllers
             {
                 return NotFound("Customer is not logged in");
             }
-            return Ok(_service.GetFavouriteDrugs(customer.CustomerId));
+            return Ok(await _service.GetFavouriteDrugs(customer.CustomerId));
         }
 
         /// <summary>  

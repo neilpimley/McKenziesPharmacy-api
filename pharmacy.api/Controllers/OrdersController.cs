@@ -1,11 +1,8 @@
 ﻿using System;
 using Pharmacy.Models;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +11,7 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Orders functions of McKenzies Pharmacy API
     /// </summary>  
-    //[Authorize]
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _service;

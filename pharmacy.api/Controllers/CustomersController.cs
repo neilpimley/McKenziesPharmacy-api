@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Pharmacy.Models.Pocos;
@@ -11,7 +10,7 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Customer functions of McKenzies Pharmacy API
     /// </summary>  
-    // [Authorize]
+    [Authorize]
     public class CustomersController : Controller
     {
         private readonly ICustomersService _service;

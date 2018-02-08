@@ -1,11 +1,8 @@
 ﻿using Pharmacy.Models;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +40,7 @@ namespace Pharmacy.Controllers
             Customer customer = _customersService.GetCustomerByUsername(userId).Result;
             if (customer == null)
             {
-                throw new Exception("Customer doesn't exist");
+                return BadRequest("Customer doesn't exist");
             }
             try
             {

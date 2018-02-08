@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Pharmacy.Models.Pocos;
 using Pharmacy.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

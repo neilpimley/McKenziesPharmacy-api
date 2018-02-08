@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
 using Pharmacy.Models;
 using Pharmacy.Models.Pocos;
 using Pharmacy.Repositories;
@@ -39,6 +36,7 @@ namespace Pharmacy
             services.AddTransient<IRegisterService, RegisterService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IReminderService, ReminderService>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddSwaggerGen(c =>
             {
@@ -63,7 +61,6 @@ namespace Pharmacy
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
             services.AddAuthentication(options =>
