@@ -14,7 +14,7 @@ namespace Pharmacy.Controllers
     /// <summary>  
     /// Orders functions of McKenzies Pharmacy API
     /// </summary>  
-    [Authorize]
+    //[Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _service;
@@ -53,47 +53,66 @@ namespace Pharmacy.Controllers
         // GET: api/Orders
         [HttpGet]
         [Route("api/Order/{id}")]
-        public async Task<OrderPoco> GetOrder(Guid id)
+        public async Task<IActionResult> GetOrder(Guid id)
         {
-            return await _service.GetOrder(id);
+            try
+            {
+                return Ok( await _service.GetOrder(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         [Route("api/Orders")]
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<IActionResult> GetOrders()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var customer = _customersService.GetCustomerByUsername(userId).Result;
             if (customer == null)
             {
-                throw new Exception("Customer doesn't exist");
+                return BadRequest("Customer doesn't exist");
             }
-            return await _service.GetOrders(customer.CustomerId);
+
+            try
+            {
+                return Ok(await _service.GetOrders(customer.CustomerId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/Orders/962ed775-a117-4e93-9d6c-7208bc5d484d
         [HttpGet]
         [Route("api/OrderLines/{id}", Name = "GetOrderLines")]
-        public Task<IEnumerable<DrugPoco>> GetOrderLines(Guid id)
+        public async Task<IActionResult> GetOrderLines(Guid id)
         {
-            return _service.GetOrderLines(id);
+            try
+            {
+                return Ok(await _service.GetOrderLines(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT: api/Orders/5
         [HttpPut]
         [Route("api/Order/{id}", Name = "SubmitOrder")]
-        public async Task<IActionResult> SubmitOrder(Guid id, OrderPoco order)
+        public async Task<IActionResult> SubmitOrder(Guid id, bool emailReminder = false, bool smsReminder = false)
         {
-            if (!ModelState.IsValid)
+            var order = await _service.GetOrder(id);
+            if (order == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Order does not exist");
             }
-            
-            if (id != order.OrderId)
-            {
-                return BadRequest();
-            }
-
+            order.SmsReminder = smsReminder;
+            order.EmailReminder = emailReminder;
             try
             {
                 await _service.SubmitOrder(order);
@@ -103,7 +122,7 @@ namespace Pharmacy.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return NoContent();
+            return Ok(order);
         }
 
         // POST: api/Orders

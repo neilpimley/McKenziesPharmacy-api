@@ -37,7 +37,7 @@ namespace Pharmacy.Controllers
         /// <param name="id">n</param>
         /// <returns code="200">Customer</returns>  // GET: api/Reminders/962ed775-a117-4e93-9d6c-7208bc5d484d
         [HttpGet]
-        public async Task<IEnumerable<ReminderPoco>> GetCustomerReminders(Guid id)
+        public async Task<IActionResult> GetCustomerReminders(Guid id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             Customer customer = _customersService.GetCustomerByUsername(userId).Result;
@@ -45,9 +45,15 @@ namespace Pharmacy.Controllers
             {
                 throw new Exception("Customer doesn't exist");
             }
-            return await _remindersService.GetCustomerReminders(customer.CustomerId);
+            try
+            {
+                return Ok(await _remindersService.GetCustomerReminders(customer.CustomerId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
         
     }
 }
