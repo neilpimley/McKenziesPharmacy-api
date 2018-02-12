@@ -9,13 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{DB645F66-199
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1659088F-56EB-456B-AE76-49CDDDB9244D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pharmacy.api.tests", "pharmacy.api.tests\pharmacy.api.tests.csproj", "{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pharmacy.api.unittests", "pharmacy.api.tests\pharmacy.api.unittests.csproj", "{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9F2FEBA2-1BA5-4680-B390-692D32B15C23}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{6CFEF137-87EF-4745-BDE3-79F83842666D}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "pharmacy.database", "pharmacy.database\pharmacy.database.sqlproj", "{0456E5EF-E404-46CD-85F8-276975AB957D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pharmacy.api.integration.tests", "pharmacy.api.integration.tests\pharmacy.api.integration.tests.csproj", "{C6236D89-7075-4046-B561-795C1FA09A4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +33,10 @@ Global
 		{9F2FEBA2-1BA5-4680-B390-692D32B15C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F2FEBA2-1BA5-4680-B390-692D32B15C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F2FEBA2-1BA5-4680-B390-692D32B15C23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0456E5EF-E404-46CD-85F8-276975AB957D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0456E5EF-E404-46CD-85F8-276975AB957D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0456E5EF-E404-46CD-85F8-276975AB957D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{0456E5EF-E404-46CD-85F8-276975AB957D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0456E5EF-E404-46CD-85F8-276975AB957D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0456E5EF-E404-46CD-85F8-276975AB957D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C6236D89-7075-4046-B561-795C1FA09A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6236D89-7075-4046-B561-795C1FA09A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6236D89-7075-4046-B561-795C1FA09A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6236D89-7075-4046-B561-795C1FA09A4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,7 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9CC46344-0D3B-471C-BEC8-6E4006EB57AA} = {DB645F66-1990-4207-A9F9-F20D0A4488C2}
 		{69CA03EB-0CF4-4A79-A78C-F48BC7F9B4DD} = {1659088F-56EB-456B-AE76-49CDDDB9244D}
-		{0456E5EF-E404-46CD-85F8-276975AB957D} = {6CFEF137-87EF-4745-BDE3-79F83842666D}
+		{C6236D89-7075-4046-B561-795C1FA09A4D} = {1659088F-56EB-456B-AE76-49CDDDB9244D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E4B88390-494D-435F-99A6-A1F2FCAC4BA4}

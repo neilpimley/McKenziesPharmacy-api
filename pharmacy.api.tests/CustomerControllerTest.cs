@@ -27,9 +27,9 @@ namespace Pharmacy.ControllerTests
 
             // Act
             IActionResult actionResult = await controller.GetCustomer(userid);
-            var contentResult = actionResult as OkObjectResult;
 
             // Assert
+            var contentResult = actionResult as OkObjectResult;
             Assert.NotNull(contentResult);
             var customer = contentResult.Value as CustomerPoco;
             Assert.Equal(userid, customer.UserId);
