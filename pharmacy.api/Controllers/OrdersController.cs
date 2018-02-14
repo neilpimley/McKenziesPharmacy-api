@@ -47,6 +47,48 @@ namespace Pharmacy.Controllers
             return Ok(order);
         }
 
+        // GET: api/Reorder/
+        [HttpPut]
+        [Route("api/Reorder/{orderId}")]
+        public async Task<IActionResult> Reorder(Guid orderId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var customer = await _customersService.GetCustomerByUsername(userId);
+            if (customer == null)
+            {
+                return NotFound("Customer does not exist");
+            }
+            var previousOrder = await _service.GetOrder(orderId);
+            if (previousOrder == null)
+            {
+                return NotFound("Previous order does not exist");
+            }
+
+            var currentOrder = await _service.GetCurrentOrder(customer.CustomerId, (int)Status.Inbasket);
+            if (currentOrder == null)
+            {
+                return NotFound("Current order could not be created");
+            }
+
+            var orderLines = await _service.GetOrderLines(previousOrder.OrderId);
+
+            await _service.DeleteAllFromOrder(currentOrder.OrderId);
+
+            foreach (var orderLine in orderLines)
+            {
+                await _service.AddToOrder(new OrderLine
+                {
+                    OrderId = currentOrder.OrderId,
+                    DrugId = orderLine.DrugId,
+                    Qty = orderLine.Qty,
+                    CreatedOn  = DateTime.Now,
+                    OrderLineStatus = (int)Status.Inbasket
+                });
+            }
+
+            return Ok(currentOrder);
+        }
+
         // GET: api/Orders
         [HttpGet]
         [Route("api/Order/{id}")]
