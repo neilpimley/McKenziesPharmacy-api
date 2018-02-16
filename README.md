@@ -43,7 +43,7 @@ In the local dev environment use "manage user secrets" in Visual Studio and add 
 }
 ```
 If hosted in Azure add the application settings below
-
+```
 ServiceSettings:SendGridApiKey
 ServiceSettings:TwilloAccountSid
 ServiceSettings:TwilloAuthToken
@@ -54,7 +54,7 @@ ServiceSettings:Auth0Domain
 ServiceSettings:Auth0ClientID
 ServiceSettings:Auth0ApiIdentifier
 ServiceSettings:Auth0ClientSecret
-
+```
 ## Docker
 To run in docker 
 ```
