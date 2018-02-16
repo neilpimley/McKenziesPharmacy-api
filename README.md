@@ -17,7 +17,6 @@ This repository contains the source code of the API and associate tests for a sa
 
 - Website Api (.NET Core / WebApi project / Swagger definitiion)
 - Core Services ( .NET Core 2.0, EF Core - services / respositories / models)
-- Database (DB deployment project)
 - Tests (XUnit / integraton)
 
 ## Applicatoin settings required in azurewebsites
