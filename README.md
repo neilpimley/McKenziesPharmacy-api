@@ -12,6 +12,9 @@ This repository contains the source code of the API and associate tests for a sa
 - Core Services ( .NET Core 2.0, EF Core - services / respositories / models)
 - Tests (XUnit / integraton)
 
+## Depedencies
+- Customer NuGet packages https://www.myget.org/F/mckenziespharmacy/api/v3/index.json
+
 ## Relates Source Code
 
 - Frontend: https://github.com/neilpimley/McKenziesPharmacy-ui
