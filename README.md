@@ -1,17 +1,17 @@
-<a href="http://mckenziespharmacy.azurewebsites.net/">
-    <h2>
-        <img src="https://github.com/neilpimley/McKenziesPharmacy-ui/raw/master/src/assets/images/cross.png" height="20" />
-    McKenzies Pharmacy</h2>
-</a>
-
-Prescription Re-ordering Service
+<img src="https://github.com/neilpimley/McKenziesPharmacy-ui/raw/master/src/assets/images/cross.png" height="30" /> McKenzies Pharmacy - Prescription Re-ordering Service
 ================================
 
-This repository contains the source code of the API and database for a sample Repeat Prescription Re-ordering Application designed for McKenzies Pharmacy and used by myself to try out new technologies
+This repository contains the source code of the API and associate tests for a sample Repeat Prescription Re-ordering Application designed for McKenzies Pharmacy and used by myself to try out new technologies.
 
-API: https://mckenziespharmacy.azurewebsites.net/swagger/
+- API Documentation: https://mckenziespharmacy.azurewebsites.net/swagger/
+- Application: https://mckenziespharmacy.netlify.com/
 
-Frontend application in Angular 4/5 lives here: https://github.com/neilpimley/McKenziesPharmacy-ui
+## Source Code
+
+- Frontend: https://github.com/neilpimley/McKenziesPharmacy-ui
+- Core Packages: https://github.com/neilpimley/McKenziesPharmacy-core
+- Back office: https://github.com/neilpimley/McKenziesPharmacy-dispensing
+- Database: https://github.com/neilpimley/McKenziesPharmacy-database
 
 ## System Components
 
@@ -44,6 +44,8 @@ In the local dev environment use "manage user secrets" in Visual Studio and add 
 ```
 If hosted in Azure add the application settings below
 ```
+ConnectionStrings:Entities
+
 ServiceSettings:SendGridApiKey
 ServiceSettings:TwilloAccountSid
 ServiceSettings:TwilloAuthToken
