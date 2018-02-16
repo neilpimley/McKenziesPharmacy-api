@@ -6,20 +6,20 @@ This repository contains the source code of the API and associate tests for a sa
 - API Documentation: https://mckenziespharmacy.azurewebsites.net/swagger/
 - Application: https://mckenziespharmacy.netlify.com/
 
-## Source Code
-
-- Frontend: https://github.com/neilpimley/McKenziesPharmacy-ui
-- Core Packages: https://github.com/neilpimley/McKenziesPharmacy-core
-- Back office: https://github.com/neilpimley/McKenziesPharmacy-dispensing
-- Database: https://github.com/neilpimley/McKenziesPharmacy-database
-
 ## System Components
 
 - Website Api (.NET Core / WebApi project / Swagger definitiion)
 - Core Services ( .NET Core 2.0, EF Core - services / respositories / models)
 - Tests (XUnit / integraton)
 
-## Applicatoin settings required in azurewebsites
+## Relates Source Code
+
+- Frontend: https://github.com/neilpimley/McKenziesPharmacy-ui
+- Core Packages: https://github.com/neilpimley/McKenziesPharmacy-core
+- Back office: https://github.com/neilpimley/McKenziesPharmacy-dispensing
+- Database: https://github.com/neilpimley/McKenziesPharmacy-database
+
+## Application settings required in azure hosting
 
 In the local dev environment use "manage user secrets" in Visual Studio and add the following to secrets.json
 ```json
